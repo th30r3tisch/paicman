@@ -1,5 +1,3 @@
-package sample;
-
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.*;
@@ -10,11 +8,9 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import javafx.scene.shape.*;
 
-public class Main extends Application {
+public class World extends Application {
 
     private ArrayList<Shape> nodes;
-
-    public static void main(String[] args) { launch(args); }
 
     @Override public void start(Stage primaryStage) {
         primaryStage.setTitle("Drag circles around to see collisions");
