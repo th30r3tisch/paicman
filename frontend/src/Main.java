@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import view.World;
 
 import java.io.IOException;
 import java.io.PrintWriter;
