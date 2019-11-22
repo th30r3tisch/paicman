@@ -1,21 +1,17 @@
-package view;
-import controller.GameController;
+package game.view;
+import game.controller.WorldController;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.shape.Shape;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-public class Game implements ViewInterface {
+public class World implements ViewInterface {
 
-    private Scene game;
-    private GameController controller;
+    private Scene world;
+    private WorldController controller;
 
-    /** Must inject a stage */
-    public Game(Stage stage) {
-        this.controller = new GameController(stage);
-    }
+    public World(WorldController wc) { this.controller = wc; }
 
     @Override
     public Scene getScene() {
@@ -24,8 +20,8 @@ public class Game implements ViewInterface {
         root.getChildren().addAll(controller.createNodes());
         controller.checkShapeIntersection(nodes.get(nodes.size() - 1));
 
-        game = new Scene(root, 400, 400);
+        world = new Scene(root, 400, 400);
 
-        return game;
+        return world;
     }
 }

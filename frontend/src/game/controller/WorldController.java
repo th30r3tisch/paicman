@@ -1,4 +1,4 @@
-package controller;
+package game.controller;
 
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -7,16 +7,20 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
+import game.view.World;
 
 import java.util.ArrayList;
 
-public class GameController {
+public class WorldController {
+
     private Stage stage;
     private ArrayList<Shape> nodes;
+    private  ConnectionController cc;
 
-    /** Inject the stage from {@link view.Game} */
-    public GameController(Stage stage) {
+    /** Inject the stage from {@link World} */
+    public WorldController(Stage stage, ConnectionController cc) {
         this.stage = stage;
+        this.cc = cc;
     }
 
     public ArrayList<Shape> createNodes(){

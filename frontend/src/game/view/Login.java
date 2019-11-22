@@ -1,6 +1,6 @@
-package view;
+package game.view;
 
-import controller.LoginController;
+import game.controller.LoginController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,16 +12,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class Login implements ViewInterface {
 
     private Scene login;
     private LoginController controller;
 
-    /** Must inject a stage */
-    public Login(Stage stage) {
-        this.controller = new LoginController(stage);
+    public Login(LoginController lc) {
+        this.controller = lc;
     }
 
     @Override
@@ -37,7 +35,7 @@ public class Login implements ViewInterface {
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
 
-        Label userName = new Label("Nick name:");
+        Label userName = new Label("Nickname:");
         grid.add(userName, 0, 1);
         TextField userTextField = new TextField();
         grid.add(userTextField, 1, 1);
@@ -47,7 +45,7 @@ public class Login implements ViewInterface {
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(startbtn);
         grid.add(hbBtn, 1, 4);
-        startbtn.setOnAction(e -> controller.submitName(e));
+        startbtn.setOnAction(e -> controller.submitName(e, userTextField.getCharacters()));
 
         login = new Scene(grid, 300, 275);
 
