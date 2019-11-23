@@ -33,6 +33,7 @@ public class Game extends Application {
         primaryStage.setResizable(false);
         primaryStage.setOnCloseRequest(e -> System.exit(0));
         primaryStage.setScene(scenes.get(SceneName.LOGIN));
+
         primaryStage.show();
         //cc.run();
     }
