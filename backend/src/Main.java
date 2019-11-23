@@ -5,34 +5,31 @@ import java.net.Socket;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * A multithreaded chat room server. When a client connects the server requests a screen
- * name by sending the client the text "SUBMITNAME", and keeps requesting a name until
- * a unique one is received. After a client submits a unique name, the server acknowledges
- * with "NAMEACCEPTED". Then all messages from that client will be broadcast to all other
- * clients that have submitted a unique screen name. The broadcast messages are prefixed
- * with "MESSAGE".
- *
- * This is just a teaching example so it can be enhanced in many ways, e.g., better
- * logging. Another is to accept a lot of fun commands, like Slack.
- */
 public class Main {
 
     // All client names, so we can check for duplicates upon registration.
     private static Set<String> names = new HashSet<>();
+    private static final int PORT = 59001;
 
     // The set of all the print writers for all the clients, used for broadcast.
     private static Set<PrintWriter> writers = new HashSet<>();
 
     public static void main(String[] args) throws Exception {
         System.out.println("Server is live!");
-        var pool = Executors.newFixedThreadPool(500);
-        try (var listener = new ServerSocket(59001)) {
+        ExecutorService pool = Executors.newFixedThreadPool(500);
+        ServerSocket listener = new ServerSocket(PORT);
+
+        try {
             while (true) {
                 pool.execute(new Handler(listener.accept()));
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            listener.close();
         }
     }
 

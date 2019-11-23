@@ -30,6 +30,8 @@ public class Game extends Application {
         scenes.put(SceneName.WORLD, new World(wc).getScene());
 
         primaryStage.setTitle("Conquer all towns");
+        primaryStage.setResizable(false);
+        primaryStage.setOnCloseRequest(e -> System.exit(0));
         primaryStage.setScene(scenes.get(SceneName.LOGIN));
         primaryStage.show();
         //cc.run();

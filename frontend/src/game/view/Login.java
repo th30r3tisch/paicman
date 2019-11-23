@@ -17,6 +17,8 @@ public class Login implements ViewInterface {
 
     private Scene login;
     private LoginController controller;
+    private int windowWidth = 300;
+    private int windowHeight = 200;
 
     public Login(LoginController lc) {
         this.controller = lc;
@@ -40,14 +42,24 @@ public class Login implements ViewInterface {
         TextField userTextField = new TextField();
         grid.add(userTextField, 1, 1);
 
+        Label serverIP = new Label("Server:");
+        grid.add(serverIP, 0, 2);
+        TextField serverIPInput = new TextField();
+        grid.add(serverIPInput, 1, 2);
+
         Button startbtn = new Button("Start");
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(startbtn);
         grid.add(hbBtn, 1, 4);
-        startbtn.setOnAction(e -> controller.submitName(e, userTextField.getCharacters()));
+        startbtn.setOnAction(e -> controller.submitName(
+                e,
+                userTextField.getCharacters(),
+                serverIPInput.getCharacters()
+                )
+        );
 
-        login = new Scene(grid, 300, 275);
+        login = new Scene(grid, windowWidth, windowHeight);
 
         return login;
     }

@@ -17,7 +17,7 @@ public class LoginController {
     }
 
     /** Submit name and load game world */
-    public void submitName(ActionEvent e, CharSequence nickname) {
+    public void submitName(ActionEvent e, CharSequence nickname, CharSequence serverIP) {
         //cc.login(nickname.toString());
         stage.setScene(Game.getScenes().get(SceneName.WORLD));
     }

@@ -10,6 +10,8 @@ public class World implements ViewInterface {
 
     private Scene world;
     private WorldController controller;
+    private int windowWidth = 500;
+    private int windowHeight = 400;
 
     public World(WorldController wc) { this.controller = wc; }
 
@@ -20,7 +22,7 @@ public class World implements ViewInterface {
         root.getChildren().addAll(controller.createNodes());
         controller.checkShapeIntersection(nodes.get(nodes.size() - 1));
 
-        world = new Scene(root, 400, 400);
+        world = new Scene(root, windowWidth, windowHeight);
 
         return world;
     }
