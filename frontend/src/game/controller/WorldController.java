@@ -3,6 +3,7 @@ package game.controller;
 import game.model.Material;
 import game.model.MaterialType;
 import game.model.Town;
+import game.model.WorldObject;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -26,44 +27,55 @@ public class WorldController {
 
     private Stage stage;
     private ArrayList<Shape> nodes;
-    private ArrayList worldObjects;
+    private ArrayList<WorldObject> worldObjects;
     private ConnectionController cc;
 
-    /** Inject the stage from {@link World} */
+    /**
+     * Inject the stage from {@link World}
+     */
     public WorldController(Stage stage, ConnectionController cc) {
         this.stage = stage;
         this.cc = cc;
     }
 
-    public ArrayList<Shape> createNodes(){
+    public ArrayList<Shape> createNodes() {
         Random r = new Random();
         nodes = new ArrayList<>();
         worldObjects = new ArrayList();
-        int worldObjectNumber = 10;
-        for(int i = 0; i < worldObjectNumber; ){
+        //26 and onwards takes to long to calculate
+        int worldObjectNumber = 25;
+        for (int i = 0; i < worldObjectNumber; ) {
             int objectDecider = r.nextInt((100 - 1) + 1) + 1;
             int xPos = r.nextInt((450 - 10) + 1) + 10;
             int yPos = r.nextInt((350 - 10) + 1) + 10;
-            int size = 20; //r.nextInt((30 - 10) + 1) + 10;
-            if(canSet(xPos,yPos)) {
-                //TODO add methods that check already existing dots and rerolls so they don't overlap
-                if (objectDecider <= 20) {
-                    //town
-                    Town town = new Town();
+            //TODO add methods that check already existing dots and rerolls so they don't overlap
+            if (objectDecider <= 20) {
+                //town
+                Town town = new Town(null, Color.GREEN);
+                if (canSet(xPos, yPos, town.getSize())) {
                     worldObjects.add(town);
-                    nodes.add(new Circle(xPos, yPos, size, town.getColor()));
-                } else if (objectDecider > 20 && objectDecider <= 60) {
-                    //food
-                    Material food = new Material(MaterialType.FOOD);
-                    worldObjects.add(food);
-                    nodes.add(new Circle(xPos, yPos, size, food.getColor()));
-                } else {
-                    //crafting maerial
-                    Material craftingMaterial = new Material(MaterialType.CRAFTING);
-                    worldObjects.add(craftingMaterial);
-                    nodes.add(new Circle(xPos, yPos, size, craftingMaterial.getColor()));
+                    nodes.add(new Circle(xPos, yPos, town.getSize(), town.getColor()));
+                    i++;
                 }
-                i++;
+
+            } else if (objectDecider > 20 && objectDecider <= 60) {
+                //food
+                Material food = new Material(MaterialType.FOOD);
+                if (canSet(xPos, yPos, food.getSize())) {
+                    worldObjects.add(food);
+                    nodes.add(new Circle(xPos, yPos, food.getSize(), food.getColor()));
+                    i++;
+                }
+            } else {
+                //crafting material
+                Material craftingMaterial = new Material(MaterialType.CRAFTING);
+                if (canSet(xPos, yPos, craftingMaterial.getSize())) {
+                    worldObjects.add(craftingMaterial);
+                    nodes.add(new Circle(xPos, yPos, craftingMaterial.getSize(), craftingMaterial.getColor()));
+                    i++;
+                }
+
+
             }
         }
 
@@ -76,7 +88,8 @@ public class WorldController {
     private void setObjectListeners(final Shape block) {
         final Delta dragDelta = new Delta();
         block.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent mouseEvent) {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
                 // record a delta distance for the drag and drop operation.
                 dragDelta.x = block.getLayoutX() - mouseEvent.getSceneX();
                 dragDelta.y = block.getLayoutY() - mouseEvent.getSceneY();
@@ -84,30 +97,33 @@ public class WorldController {
             }
         });
         block.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent mouseEvent) {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
                 block.setCursor(Cursor.HAND);
             }
         });
         block.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent mouseEvent) {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
                 block.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
                 block.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
                 checkShapeIntersection(block);
             }
         });
-        block.setOnMouseClicked(new EventHandler<MouseEvent>(){
+        block.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(MouseEvent mouseEvent) {
                 MouseButton button = mouseEvent.getButton();
-                switch(button){
+                switch (button) {
                     case SECONDARY:
                         System.out.println("right click");
                         break;
                     case PRIMARY:
                         System.out.println("left click");
                         break;
-                    default: System.out.println("something click");
+                    default:
+                        System.out.println("something click");
                 }
             }
         });
@@ -116,15 +132,15 @@ public class WorldController {
         Label label = new Label();
         ContextMenu contextMenu = new ContextMenu();
 
-        String menuText="";
+        String menuText = "";
         int i = nodes.indexOf(block);
         Object worldObject = null;
-        if(i >= 0){
+        if (i >= 0) {
             worldObject = worldObjects.get(i);
-            if(Material.class.isInstance(worldObject)){
+            if (Material.class.isInstance(worldObject)) {
                 menuText = "Harvest";
-            }  else {
-              menuText = "Conquer";
+            } else {
+                menuText = "Conquer";
             }
         }
 
@@ -134,8 +150,8 @@ public class WorldController {
 
             @Override
             public void handle(ActionEvent event) {
-                if(finalWorldObject != null){
-                    if(Material.class.isInstance(finalWorldObject)){
+                if (finalWorldObject != null) {
+                    if (Material.class.isInstance(finalWorldObject)) {
                         Material m = (Material) finalWorldObject;
                     } else {
                         Town t = (Town) finalWorldObject;
@@ -177,35 +193,38 @@ public class WorldController {
         if (collisionDetected) {
             block.setFill(Color.BLUE);
         } else {
-         int i = nodes.indexOf(block);
-         if(i >= 0){
-         Object worldObject = worldObjects.get(i);
-         if(Material.class.isInstance(worldObject)){
-             Material m = (Material) worldObject;
-             block.setFill(m.getColor());
-         }  else {
-             Town t = (Town) worldObject;
-             block.setFill(t.getColor());
-         }
-         }
+            int i = nodes.indexOf(block);
+            if (i >= 0) {
+                Object worldObject = worldObjects.get(i);
+                if (Material.class.isInstance(worldObject)) {
+                    Material m = (Material) worldObject;
+                    block.setFill(m.getColor());
+                } else {
+                    Town t = (Town) worldObject;
+                    block.setFill(t.getColor());
+                }
+            }
         }
     }
-    class Delta { double x, y; }
+
+    class Delta {
+        double x, y;
+    }
 
 
-    private boolean canSet(int x, int y){
-
-        //should check if two points are overlapping, but does nor work atm
-        if(nodes.size() == 0) return true;
+    private boolean canSet(int x, int y, int size) {
+        if (nodes.size() == 0) return true;
         AtomicBoolean canSet = new AtomicBoolean(true);
-        for(int i = 0; i< nodes.size(); i++){
+        for (int i = 0; i < nodes.size(); i++) {
             Shape node = nodes.get(i);
+            WorldObject wo = worldObjects.get(i);
             Circle c = (Circle) node;
             double xDiff = Math.pow((c.getCenterX() - x), 2);
             double yDiff = Math.pow((c.getCenterX() - x), 2);
             double diff = Math.sqrt(xDiff + yDiff);
-            if (diff <= 40){
+            if (diff <= (wo.getSize() + size)) {
                 canSet.set(false);
+                break;
             }
         }
         return canSet.get();

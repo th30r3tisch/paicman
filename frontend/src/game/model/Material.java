@@ -5,24 +5,23 @@ import javafx.scene.paint.Color;
 
 import java.io.Serializable;
 
-public class Material implements Serializable {
+public class Material extends WorldObject {
 
 
     private MaterialType materialType;
 
     private int weight;
 
-    private Color color;
-
 
     public Material(MaterialType materialType) {
         this.materialType = materialType;
+        setSize(8);
         if( materialType == MaterialType.CRAFTING){
             this.weight = 4;
-             color = Color.BEIGE;
+             setColor(Color.BEIGE);
         } else {
             weight = 1;
-            color = Color.CORAL;
+           setColor(Color.CORAL);
         }
     }
 
@@ -43,7 +42,4 @@ public class Material implements Serializable {
         return materialType;
     }
 
-    public Color getColor() {
-        return color;
-    }
 }

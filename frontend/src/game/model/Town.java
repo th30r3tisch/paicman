@@ -2,15 +2,20 @@ package game.model;
 
 import javafx.scene.paint.Color;
 
-import java.io.Serializable;
 
-public class Town implements Serializable {
+public class Town extends WorldObject {
 
     private Player owner;
     private int life;
 
     //change later to owners color
     private Color color = Color.GREEN;
+
+    public Town(Player owner, Color color) {
+        this.owner = owner;
+        this.color = color;
+        setSize(15);
+    }
 
     public Player getOwner() {
         return owner;
