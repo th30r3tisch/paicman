@@ -1,9 +1,6 @@
-package game.model;
+package game.model.world_objects;
 
-import com.sun.prism.paint.Paint;
 import javafx.scene.paint.Color;
-
-import java.io.Serializable;
 
 public class Material extends WorldObject {
 

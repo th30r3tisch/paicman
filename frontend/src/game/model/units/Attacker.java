@@ -1,6 +1,6 @@
-package game.model;
+package game.model.units;
 
-public class Attacker extends Unit{
+public class Attacker extends Unit {
 
     private int damage;
 

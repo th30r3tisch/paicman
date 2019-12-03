@@ -40,7 +40,7 @@ public class World implements ViewInterface {
     //maybe move away from class for mvc
     private void onUpdate(){
         //TODO
-        //CHeck ech players units and check if they collide with each other for eg damage calc
+        //Check ech players units and check if they collide with each other for eg damage calc
             //they kill each other
             //if collide with town decrease towns hp
         //check if collectors collide with materials or food

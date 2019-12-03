@@ -1,4 +1,4 @@
-package game.model;
+package game.model.world_objects;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;

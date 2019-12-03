@@ -1,5 +1,6 @@
-package game.model;
+package game.model.world_objects;
 
+import game.model.Player;
 import javafx.scene.paint.Color;
 
 

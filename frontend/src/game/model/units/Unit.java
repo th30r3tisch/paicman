@@ -1,9 +1,10 @@
-package game.model;
+package game.model.units;
 
 import javafx.scene.Node;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public abstract class Unit implements Serializable {
 
@@ -11,6 +12,7 @@ public abstract class Unit implements Serializable {
 
     private Node view;
     private Point2D velocity;
+    private ArrayList path;
 
     public Integer getLife() {
         return life;
@@ -18,6 +20,10 @@ public abstract class Unit implements Serializable {
 
     public void setLife(Integer life) {
         this.life = life;
+    }
+
+    private void calculatePath(){
+        //TODO implement
     }
 
     //update method for updating position

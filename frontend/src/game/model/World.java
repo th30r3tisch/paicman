@@ -1,5 +1,7 @@
 package game.model;
 
+import game.model.world_objects.Town;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 

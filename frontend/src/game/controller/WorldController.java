@@ -1,9 +1,9 @@
 package game.controller;
 
-import game.model.Material;
-import game.model.MaterialType;
-import game.model.Town;
-import game.model.WorldObject;
+import game.model.world_objects.Material;
+import game.model.world_objects.MaterialType;
+import game.model.world_objects.Town;
+import game.model.world_objects.WorldObject;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;

@@ -1,4 +1,6 @@
-package game.model;
+package game.model.units;
+
+import game.model.world_objects.Material;
 
 import java.util.ArrayList;
 
