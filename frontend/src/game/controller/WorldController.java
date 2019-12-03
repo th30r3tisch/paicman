@@ -28,14 +28,12 @@ public class WorldController {
     private Stage stage;
     private ArrayList<Shape> nodes;
     private ArrayList<WorldObject> worldObjects;
-    private ConnectionController cc;
 
     /**
      * Inject the stage from {@link World}
      */
-    public WorldController(Stage stage, ConnectionController cc) {
+    public WorldController(Stage stage) {
         this.stage = stage;
-        this.cc = cc;
     }
 
     public ArrayList<Shape> createNodes() {
