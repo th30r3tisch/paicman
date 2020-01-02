@@ -1,3 +1,5 @@
+import game.quadtree.Boundry;
+import game.quadtree.Quadtree;
 import game.model.Message;
 import game.model.MessageType;
 import game.model.Player;
@@ -23,6 +25,8 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         LOGGER.log(Level.INFO,"Server is live!");
+        Quadtree anySpace = new Quadtree(1, new Boundry(0, 0, 1000, 1000), LOGGER);
+
         ExecutorService pool = Executors.newFixedThreadPool(500);
         ServerSocket listener = new ServerSocket(PORT);
 
