@@ -1,4 +1,4 @@
-package game.quadtree;
+package game.map;
 
 import java.util.ArrayList;
 import java.util.List;

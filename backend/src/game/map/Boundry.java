@@ -1,4 +1,4 @@
-package game.quadtree;
+package game.map;
 
 public class Boundry {
 
