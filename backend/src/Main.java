@@ -91,7 +91,7 @@ public class Main {
 
         private Message sendNotification() throws IOException {
             Message msg = new Message();
-            msg.setNote("has joined the game.");
+            msg.setNote(name + " has joined the game.");
             msg.setType(MessageType.NOTIFICATION);
             msg.setPlayer(player);
             write(msg);
@@ -100,7 +100,7 @@ public class Main {
 
         private Message removeFromList() throws IOException {
             Message msg = new Message();
-            msg.setNote("has left the game.");
+            msg.setNote(name + " has left the game.");
             msg.setType(MessageType.DISCONNECTED);
             write(msg);
             return msg;
@@ -169,7 +169,7 @@ public class Main {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            LOGGER.log(Level.INFO,"HashMap names:" + names.size() + " writers:" + writers.size() + " usersList size:" + players.size());
+            LOGGER.log(Level.INFO,"HashMap names: " + names.size() + " writers: " + writers.size() + " usersList size: " + players.size());
             LOGGER.log(Level.INFO,"Closing connection finished");
         }
 
@@ -182,9 +182,9 @@ public class Main {
                 players.add(player);
                 names.put(name, player);
 
-                LOGGER.log(Level.INFO, name + "is connected");
+                LOGGER.log(Level.INFO, name + " is connected");
             } else {
-                LOGGER.log(Level.SEVERE, name + "is already connected");
+                LOGGER.log(Level.SEVERE, name + " is already connected");
             }
         }
     }

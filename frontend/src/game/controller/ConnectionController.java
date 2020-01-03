@@ -50,7 +50,7 @@ public class ConnectionController implements Runnable{
                 Message message = (Message) ois.readObject();
 
                 if (message != null) {
-                    LOGGER.log(Level.INFO, "Message received:" + message.getNote() + " MessageType:" + message.getType() + "Name:" + message.getPlayer());
+                    LOGGER.log(Level.INFO, " Message received: " + message.getNote() + " MessageType: " + message.getType() + " Name: " + message.getPlayer());
                     switch (message.getType()) {
                         case PLAYER:
                             LOGGER.log(Level.INFO,"Player msg");
