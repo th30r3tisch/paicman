@@ -1,15 +1,16 @@
 package game.model;
 
+import java.awt.*;
 import java.io.Serializable;
 
 public class Player implements Serializable {
 
     private String name;
-    private String color;
+    private Color color;
 
-    public String getColor() { return color; }
+    public Color getColor() { return color; }
 
-    public void setColor(String color) { this.color = color; }
+    public void setColor(Color color) { this.color = color; }
 
     public String getName() {
         return name;
