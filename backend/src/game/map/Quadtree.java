@@ -1,5 +1,7 @@
 package game.map;
 
+import game.model.Node;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -32,7 +34,7 @@ public class Quadtree {
                 tree.boundry.getxMax(), tree.boundry.getyMax());
 
         for (Node node : tree.nodes) {
-            System.out.printf(" \n\t  x=%d y=%d", node.x, node.y);
+            System.out.printf(" \n\t  x=%d y=%d", node.getX(), node.getY());
         }
         dfs(tree.northWest);
         dfs(tree.northEast);
@@ -59,12 +61,13 @@ public class Quadtree {
 
     }
 
-    public void insert(int x, int y, int value) {
+    public void insert(Node node) {
+        int x = node.getX();
+        int y = node.getY();
         if (!this.boundry.inRange(x, y)) {
             return;
         }
 
-        Node node = new Node(x, y, value);
         if (nodes.size() < MAX_CAPACITY) {
             nodes.add(node);
             return;
@@ -76,13 +79,13 @@ public class Quadtree {
 
         // Check coordinates belongs to which partition
         if (this.northWest.boundry.inRange(x, y))
-            this.northWest.insert(x, y, value);
+            this.northWest.insert(node);
         else if (this.northEast.boundry.inRange(x, y))
-            this.northEast.insert(x, y, value);
+            this.northEast.insert(node);
         else if (this.southWest.boundry.inRange(x, y))
-            this.southWest.insert(x, y, value);
+            this.southWest.insert(node);
         else if (this.southEast.boundry.inRange(x, y))
-            this.southEast.insert(x, y, value);
+            this.southEast.insert(node);
         else
             LOGGER.log(Level.SEVERE, "ERROR : Unhandled partition " +  x +  y);
     }

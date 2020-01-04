@@ -1,17 +1,20 @@
 package game.model;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class Town {
+public class Town extends Node implements Serializable {
 
     private Player owner;
     private int life;
     private Color color;
 
-    public Town(Player conqueror) {
+    public Town(Player conqueror, int x, int y) {
         this.life = 20;
         this.owner = conqueror;
         this.color = conqueror.getColor();
+        this.x = x;
+        this.y = y;
     }
 
     public Player getOwner() { return owner; }

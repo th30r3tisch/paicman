@@ -1,38 +1,73 @@
-/*
-import java.util.Arrays;
+import game.map.Boundry;
+import game.map.Quadtree;
+import game.model.Obstacle;
+import game.model.Player;
+import game.model.Town;
 
-public class Game {
+import java.awt.*;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-    // Board cells numbered 0-8, top to bottom, left to right; null if empty
-    private Player[] board = new Player[9];
 
-    Player currentPlayer;
+class Game implements Runnable {
+    private Socket socket;
+    private Quadtree map;
+    private static Logger LOGGER = Logger.getLogger("InfoLogging");
+    private int obstacles = 10;
+    private int towns = 20;
+    private int gameMapHeight = 2000; // has to match with the gameMapHeight in frontend
+    private int gameMapWidth = 4000; // has to match with the gameMapWidth in frontend
 
-    public boolean hasWinner() {
-        return (board[0] != null && board[0] == board[1] && board[0] == board[2])
-                || (board[3] != null && board[3] == board[4] && board[3] == board[5])
-                || (board[6] != null && board[6] == board[7] && board[6] == board[8])
-                || (board[0] != null && board[0] == board[3] && board[0] == board[6])
-                || (board[1] != null && board[1] == board[4] && board[1] == board[7])
-                || (board[2] != null && board[2] == board[5] && board[2] == board[8])
-                || (board[0] != null && board[0] == board[4] && board[0] == board[8])
-                || (board[2] != null && board[2] == board[4] && board[2] == board[6]
-        );
+    public Game(Socket socket) {
+        this.socket = socket;
+        this.map = new Quadtree(1, new Boundry(0, 0, gameMapWidth, gameMapHeight));
     }
 
-    public boolean boardFilledUp() {
-        return Arrays.stream(board).allMatch(p -> p != null);
-    }
+    @Override
+    public void run() {
+        LOGGER.log(Level.INFO,"Trying create map");
+        genereateInitialMap();
+        try {
 
-    public synchronized void move(int location, Player player) {
-        if (player != currentPlayer) {
-            throw new IllegalStateException("Not your turn");
-        } else if (player.opponent == null) {
-            throw new IllegalStateException("You don't have an opponent yet");
-        } else if (board[location] != null) {
-            throw new IllegalStateException("Cell already occupied");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {socket.close();} catch (IOException e) {}
         }
-        board[location] = currentPlayer;
-        currentPlayer = currentPlayer.opponent;
     }
-}*/
+
+    private void genereateInitialMap() {
+        createObstacles();
+        createTowns();
+    }
+     private void createTowns(){
+        Player system = new Player();
+        system.setName("system");
+        system.setColor(Color.GRAY);
+         for (int i = 0; i < towns; i++){
+             map.insert( new Town(
+                     system,
+                     randomNumber(0, gameMapWidth),
+                     randomNumber(0, gameMapHeight)
+             ));
+         }
+     }
+
+     private void createObstacles(){
+         for (int i = 0; i < obstacles; i++){
+             map.insert(new Obstacle(
+                     randomNumber(0, gameMapWidth),
+                     randomNumber(0, gameMapHeight),
+                     randomNumber(0, 1),
+                     randomNumber(50, 400)));
+         }
+     }
+
+     private int randomNumber(int min, int max){
+         Random r = new Random();
+         return r.nextInt(max - min + 1) + min;
+     }
+}

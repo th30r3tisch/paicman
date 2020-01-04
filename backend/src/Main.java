@@ -1,5 +1,3 @@
-import game.map.Boundry;
-import game.map.Quadtree;
 import game.model.Message;
 import game.model.MessageType;
 import game.model.Player;
@@ -25,7 +23,6 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         LOGGER.log(Level.INFO,"Server is live!");
-        Quadtree anySpace = new Quadtree(1, new Boundry(0, 0, 1000, 1000));
 
         ExecutorService pool = Executors.newFixedThreadPool(500);
         ServerSocket listener = new ServerSocket(PORT);
@@ -33,6 +30,7 @@ public class Main {
         try {
             while (true) {
                 pool.execute(new Handler(listener.accept()));
+                pool.execute(new Game(listener.accept()));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -176,7 +174,6 @@ public class Main {
         private synchronized void checkDuplicatePlayer(){
             LOGGER.log(Level.INFO,"Trying to connect " + name);
             if (!names.containsKey(name)) {
-                this.name = name;
                 player = new Player();
                 player.setName(name);
                 players.add(player);

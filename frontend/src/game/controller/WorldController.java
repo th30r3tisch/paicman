@@ -48,53 +48,6 @@ public class WorldController {
         return scroll;
     }
 
-    public ArrayList<Shape> createNodes() {
-        Random r = new Random();
-        nodes = new ArrayList<>();
-        worldObjects = new ArrayList();
-        //26 and onwards takes to long to calculate
-        int worldObjectNumber = 25;
-        for (int i = 0; i < worldObjectNumber; ) {
-            int objectDecider = r.nextInt((100 - 1) + 1) + 1;
-            int xPos = r.nextInt((450 - 10) + 1) + 10;
-            int yPos = r.nextInt((350 - 10) + 1) + 10;
-            //TODO add methods that check already existing dots and rerolls so they don't overlap
-            if (objectDecider <= 20) {
-                //town
-                Town town = new Town(null, Color.GREEN);
-                if (canSet(xPos, yPos, town.getSize())) {
-                    worldObjects.add(town);
-                    nodes.add(new Circle(xPos, yPos, town.getSize(), town.getColor()));
-                    i++;
-                }
-
-            } else if (objectDecider > 20 && objectDecider <= 60) {
-                //food
-                Material food = new Material(MaterialType.FOOD);
-                if (canSet(xPos, yPos, food.getSize())) {
-                    worldObjects.add(food);
-                    nodes.add(new Circle(xPos, yPos, food.getSize(), food.getColor()));
-                    i++;
-                }
-            } else {
-                //crafting material
-                Material craftingMaterial = new Material(MaterialType.CRAFTING);
-                if (canSet(xPos, yPos, craftingMaterial.getSize())) {
-                    worldObjects.add(craftingMaterial);
-                    nodes.add(new Circle(xPos, yPos, craftingMaterial.getSize(), craftingMaterial.getColor()));
-                    i++;
-                }
-
-
-            }
-        }
-
-        for (Shape block : nodes) {
-            setObjectListeners(block);
-        }
-        return nodes;
-    }
-
     private void setObjectListeners(final Shape block) {
         final Delta dragDelta = new Delta();
         block.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -221,22 +174,4 @@ public class WorldController {
         double x, y;
     }
 
-
-    private boolean canSet(int x, int y, int size) {
-        if (nodes.size() == 0) return true;
-        AtomicBoolean canSet = new AtomicBoolean(true);
-        for (int i = 0; i < nodes.size(); i++) {
-            Shape node = nodes.get(i);
-            WorldObject wo = worldObjects.get(i);
-            Circle c = (Circle) node;
-            double xDiff = Math.pow((c.getCenterX() - x), 2);
-            double yDiff = Math.pow((c.getCenterX() - x), 2);
-            double diff = Math.sqrt(xDiff + yDiff);
-            if (diff <= (wo.getSize() + size)) {
-                canSet.set(false);
-                break;
-            }
-        }
-        return canSet.get();
-    }
 }
