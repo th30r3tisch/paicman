@@ -10,9 +10,11 @@ import javafx.scene.Cursor;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
@@ -34,6 +36,16 @@ public class WorldController {
      */
     public WorldController(Stage stage) {
         this.stage = stage;
+    }
+
+    /** @return a ScrollPane which scrolls the layout. */
+    public ScrollPane createScrollPane(Pane layout) {
+        ScrollPane scroll = new ScrollPane();
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroll.setPannable(true);
+        scroll.setContent(layout);
+        return scroll;
     }
 
     public ArrayList<Shape> createNodes() {
