@@ -1,43 +1,34 @@
 package game.model.world_objects;
 
 import game.model.Player;
-import javafx.scene.paint.Color;
 
+import java.awt.*;
+import java.io.Serializable;
 
-public class Town extends WorldObject {
+public class Town extends Node implements Serializable {
 
     private Player owner;
     private int life;
+    private Color color;
 
-    //change later to owners color
-    private Color color = Color.GREEN;
-
-    public Town(Player owner, Color color) {
-        this.owner = owner;
-        this.color = color;
-        setSize(15);
+    public Town(Player conqueror, int x, int y) {
+        this.life = 20;
+        this.owner = conqueror;
+        this.color = conqueror.getColor();
+        this.x = x;
+        this.y = y;
     }
 
-    public Player getOwner() {
-        return owner;
+    public Player getOwner() { return owner; }
+
+    public void setOwner(Player conqueror) {
+        this.owner = conqueror;
+        this.color = conqueror.getColor();
     }
 
-    public void setOwner(Player owner) {
-        this.owner = owner;
-    }
+    public int getLife() { return life; }
 
-    public Integer getLife() {
-        return life;
-    }
-
-    public void setLife(Integer life) {
-        this.life = life;
-    }
+    public void setLife(int life) { this.life = life; }
 
     public Color getColor() { return color; }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
 }

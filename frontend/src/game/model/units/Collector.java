@@ -1,7 +1,5 @@
 package game.model.units;
 
-import game.model.world_objects.Material;
-
 import java.util.ArrayList;
 
 public class Collector extends Unit {
