@@ -2,13 +2,16 @@ package game.controller;
 
 import game.model.Message;
 import game.model.Player;
+import game.model.world_objects.Node;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static game.model.MessageType.CONNECTED;
+import static game.model.MessageType.SERVER;
 
 // is responsible for handling all the connections
 public class ConnectionController implements Runnable{
@@ -21,19 +24,16 @@ public class ConnectionController implements Runnable{
     private OutputStream outputStream;
     private static Logger LOGGER = Logger.getLogger("InfoLogging");
     private static Player player;
-    private boolean isConnected;
 
     public ConnectionController(Player player, String serverAddress) {
         this.serverAddress = serverAddress;
         this.port = 59001;
         ConnectionController.player = player;
-        isConnected = false;
     }
 
     public void run() {
         try {
             socket = new Socket(serverAddress, port);
-            //LoginController.getInstance().showScene();
             outputStream = socket.getOutputStream();
             oos = new ObjectOutputStream(outputStream);
             inputStream = socket.getInputStream();
@@ -62,11 +62,9 @@ public class ConnectionController implements Runnable{
                             LOGGER.log(Level.INFO,"Server msg");
                             break;
                         case CONNECTED:
-                            isConnected = true;
                             LOGGER.log(Level.INFO,"Connected msg");
                             break;
                         case DISCONNECTED:
-                            isConnected = false;
                             LOGGER.log(Level.INFO,"Disconnected msg");
                             break;
                     }
@@ -85,7 +83,12 @@ public class ConnectionController implements Runnable{
         oos.writeObject(loginmsg);
     }
 
-    public boolean isConnected() {
-        return isConnected;
+    public static void getMap() throws IOException{
+        Message mapRequest = new Message();
+        mapRequest.setPlayer(player);
+        mapRequest.setType(SERVER);
+        mapRequest.setNote(player.getName() + " needs the map.");
+        oos.writeObject(mapRequest);
+        oos.flush();
     }
 }

@@ -24,8 +24,8 @@ public class World implements ViewInterface {
     private int gameMapWidth = 4000;
     private Image backgroundImage;
 
-    public World(WorldController wc) {
-        this.controller = wc;
+    public World() {
+        this.controller = new WorldController();
         backgroundImage = new Image("assets/map.jpg");
     }
 
@@ -40,9 +40,7 @@ public class World implements ViewInterface {
         r.setHeight(100);
         r.setWidth(50);
         g.getChildren().addAll(
-                c,
-                b,
-                a
+                controller.getObjects()
         );
 
         Menu menu = new Menu("Menu");

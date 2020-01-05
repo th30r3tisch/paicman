@@ -2,9 +2,12 @@ package game.controller;
 
 import game.Game;
 import game.model.Player;
+import game.view.World;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import game.model.SceneName;
+
+import java.io.IOException;
 
 public class LoginController {
 
@@ -24,8 +27,6 @@ public class LoginController {
         cc = new ConnectionController(player, serverIP.toString());
         Thread t = new Thread(cc);
         t.start();
-        //if (cc.isConnected()){
-            stage.setScene(Game.getScenes().get(SceneName.WORLD));
-        //}
+        stage.setScene(new World().getScene());
     }
 }

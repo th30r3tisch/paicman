@@ -87,6 +87,6 @@ public class Quadtree {
         else if (this.southEast.boundry.inRange(x, y))
             this.southEast.insert(node);
         else
-            LOGGER.log(Level.SEVERE, "ERROR : Unhandled partition " +  x +  y);
+            LOGGER.log(Level.SEVERE, "ERROR : Unhandled partition " + x + " " +  y);
     }
 }
