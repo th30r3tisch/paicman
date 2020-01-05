@@ -1,15 +1,20 @@
 package game.model.world_objects;
 
 import game.model.Player;
-
 import java.awt.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Town extends Node implements Serializable {
 
     private Player owner;
     private int life;
     private Color color;
+    private ArrayList<Town> conqueredByTowns;
+
+    public ArrayList<Town> getConqueredByTowns() { return conqueredByTowns; }
+    public void addConqueredByTown(Town town) { this.conqueredByTowns.add(town); }
+    public void removeConqueredByTown(Town town) { }
 
     public Town(Player conqueror, int x, int y) {
         this.life = 20;
@@ -27,7 +32,6 @@ public class Town extends Node implements Serializable {
     }
 
     public int getLife() { return life; }
-
     public void setLife(int life) { this.life = life; }
 
     public Color getColor() { return color; }

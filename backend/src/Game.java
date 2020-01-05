@@ -5,15 +5,13 @@ import game.model.Player;
 import game.model.Town;
 
 import java.awt.*;
-import java.io.IOException;
 import java.net.Socket;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-class Game implements Runnable {
-    private Socket socket;
+class Game {
     private Quadtree map;
     private static Logger LOGGER = Logger.getLogger("InfoLogging");
     private int obstacles = 10;
@@ -21,22 +19,10 @@ class Game implements Runnable {
     private int gameMapHeight = 2000; // has to match with the gameMapHeight in frontend
     private int gameMapWidth = 4000; // has to match with the gameMapWidth in frontend
 
-    public Game(Socket socket) {
-        this.socket = socket;
+    public Game() {
         this.map = new Quadtree(1, new Boundry(0, 0, gameMapWidth, gameMapHeight));
-    }
-
-    @Override
-    public void run() {
-        LOGGER.log(Level.INFO,"Trying create map");
+        LOGGER.log(Level.INFO,"Creating map");
         genereateInitialMap();
-        try {
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {socket.close();} catch (IOException e) {}
-        }
     }
 
     private void genereateInitialMap() {

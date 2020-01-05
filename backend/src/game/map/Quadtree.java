@@ -20,7 +20,7 @@ public class Quadtree {
 
     public Quadtree(int level, Boundry boundry) {
         this.level = level;
-        nodes = new ArrayList<Node>();
+        nodes = new ArrayList<>();
         this.boundry = boundry;
     }
 
@@ -49,15 +49,25 @@ public class Quadtree {
                 + (this.boundry.getyMax() - this.boundry.getyMin()) / 2;
 
         northWest = new Quadtree(this.level + 1, new Boundry(
-                this.boundry.getxMin(), this.boundry.getyMin(), xOffset,
+                this.boundry.getxMin(),
+                this.boundry.getyMin(),
+                xOffset,
                 yOffset));
-        northEast = new Quadtree(this.level + 1, new Boundry(xOffset,
-                this.boundry.getyMin(), this.boundry.getxMax(), yOffset));
+        northEast = new Quadtree(this.level + 1, new Boundry(
+                xOffset,
+                this.boundry.getyMin(),
+                this.boundry.getxMax(),
+                yOffset));
         southWest = new Quadtree(this.level + 1, new Boundry(
-                this.boundry.getxMin(), xOffset, xOffset,
+                this.boundry.getxMin(),
+                yOffset,
+                xOffset,
                 this.boundry.getyMax()));
-        southEast = new Quadtree(this.level + 1, new Boundry(xOffset, yOffset,
-                this.boundry.getxMax(), this.boundry.getyMax()));
+        southEast = new Quadtree(this.level + 1, new Boundry(
+                xOffset,
+                yOffset,
+                this.boundry.getxMax(),
+                this.boundry.getyMax()));
 
     }
 

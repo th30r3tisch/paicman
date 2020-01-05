@@ -8,7 +8,6 @@ public class Node implements Serializable {
     public int getX() {
         return x;
     }
-
     public int getY() {
         return y;
     }

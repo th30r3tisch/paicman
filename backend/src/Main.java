@@ -8,8 +8,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,13 +26,12 @@ public class Main {
     public static void main(String[] args) throws Exception {
         LOGGER.log(Level.INFO,"Server is live!");
 
-        ExecutorService pool = Executors.newFixedThreadPool(500);
+        ExecutorService pool = Executors.newFixedThreadPool(100);
         ServerSocket listener = new ServerSocket(PORT);
 
         try {
             while (true) {
                 pool.execute(new Handler(listener.accept()));
-                pool.execute(new Game(listener.accept()));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,8 +52,12 @@ public class Main {
         private ObjectOutputStream output;
         private InputStream is;
         private static Logger LOGGER = Logger.getLogger("InfoLogging");
+        private Game map;
 
-        public Handler(Socket socket) { this.socket = socket; }
+        public Handler(Socket socket) {
+            this.socket = socket;
+            this.map = new Game();
+        }
 
         public void run() {
             LOGGER.log(Level.INFO,"Trying to connect player");
