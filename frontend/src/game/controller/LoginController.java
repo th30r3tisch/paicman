@@ -28,5 +28,6 @@ public class LoginController {
         Thread t = new Thread(cc);
         t.start();
         stage.setScene(new World().getScene());
+
     }
 }
