@@ -2,6 +2,8 @@ package game;
 
 import game.controller.LoginController;
 import game.controller.WorldController;
+import game.controller.WorldScene;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -21,7 +23,6 @@ public class Game extends Application {
         primaryStage.setResizable(false);
         primaryStage.setOnCloseRequest(e -> System.exit(0));
         primaryStage.setScene(new Login(lc).getScene());
-
         primaryStage.show();
     }
 }
