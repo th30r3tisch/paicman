@@ -2,6 +2,7 @@ import game.model.Message;
 import game.model.MessageType;
 import game.model.Player;
 
+import java.awt.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,17 +21,16 @@ public class Main {
     private static final HashMap<String, Player> names = new HashMap<>();
     private static ArrayList<Player> players = new ArrayList<>();
     private static Logger LOGGER = Logger.getLogger("InfoLogging");
+    private static Game game;
 
     public static void main(String[] args) throws Exception {
         LOGGER.log(Level.INFO,"Server is live!");
-
-        ExecutorService pool = Executors.newFixedThreadPool(500);
+        ExecutorService pool = Executors.newFixedThreadPool(32);
         ServerSocket listener = new ServerSocket(PORT);
 
         try {
             while (true) {
                 pool.execute(new Handler(listener.accept()));
-                pool.execute(new Game(listener.accept()));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,7 +52,12 @@ public class Main {
         private InputStream is;
         private static Logger LOGGER = Logger.getLogger("InfoLogging");
 
-        public Handler(Socket socket) { this.socket = socket; }
+        public Handler(Socket socket) {
+            this.socket = socket;
+            if (game == null){
+                game = new Game();
+            }
+        }
 
         public void run() {
             LOGGER.log(Level.INFO,"Trying to connect player");
@@ -77,6 +82,10 @@ public class Main {
                             case CONNECTED:
                                 addToList();
                                 break;
+                            case SERVER:
+                                sendInitialMap();
+                                LOGGER.log(Level.INFO, "Map sent to " + name);
+                                break;
                         }
                     }
                 }
@@ -85,6 +94,16 @@ public class Main {
             } finally {
                 closeConnections();
             }
+        }
+
+        private Message sendInitialMap() throws IOException{
+            Message msg = new Message();
+            msg.setNote("Initial map received");
+            msg.setType(MessageType.SERVER);
+            msg.setPlayer(player);
+            msg.setTreeNodes(game.getAreaContent());
+            write(msg);
+            return msg;
         }
 
         private Message sendNotification() throws IOException {
@@ -176,6 +195,7 @@ public class Main {
             if (!names.containsKey(name)) {
                 player = new Player();
                 player.setName(name);
+                player.setColor(Color.BLUE);
                 players.add(player);
                 names.put(name, player);
 

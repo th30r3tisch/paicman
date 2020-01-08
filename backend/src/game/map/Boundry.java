@@ -12,7 +12,7 @@ public class Boundry {
         this.yMax = yMax;
     }
 
-    public boolean inRange(int x, int y) {
+    public boolean inRange(float x, float y) {
         return (x >= this.getxMin() && x <= this.getxMax()
                 && y >= this.getyMin() && y <= this.getyMax());
     }

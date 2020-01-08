@@ -2,7 +2,7 @@ package game.model;
 
 import java.io.Serializable;
 
-public class Obstacle extends Node implements Serializable {
+public class Obstacle extends TreeNode implements Serializable {
 
     private int width;
     private int height;

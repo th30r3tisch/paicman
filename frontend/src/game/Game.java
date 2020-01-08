@@ -5,19 +5,15 @@ import game.controller.WorldController;
 import game.controller.WorldScene;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import game.model.SceneName;
 import game.view.Login;
-import game.view.World;
-
-import java.util.HashMap;
 
 public class Game extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        LoginController lc = new LoginController(primaryStage);
+        WorldController wc = new WorldController();
+        LoginController lc = new LoginController(primaryStage, wc);
 
         primaryStage.setTitle("Conquer all towns");
         primaryStage.setResizable(false);

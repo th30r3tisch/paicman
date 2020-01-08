@@ -1,8 +1,12 @@
-package game.model.world_objects;
+package game.model;
+
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.io.Serializable;
 
-public class Obstacle extends Node implements Serializable {
+public class Obstacle extends TreeNode implements Serializable {
+    private static final long serialVersionUID = -5996449674723651911L;
 
     private int width;
     private int height;
@@ -47,4 +51,10 @@ public class Obstacle extends Node implements Serializable {
         return vertical;
     }
 
+    @Override
+    public Rectangle create(){
+        Rectangle r = new Rectangle(this.x, this.y, this.width, this.height);
+        r.setFill(Color.BLACK);
+        return r;
+    }
 }
