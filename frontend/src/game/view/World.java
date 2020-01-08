@@ -1,5 +1,6 @@
 package game.view;
 import game.controller.WorldController;
+import game.controller.WorldScene;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Orientation;
 import javafx.scene.Group;
@@ -15,7 +16,7 @@ import javafx.scene.text.Text;
 
 public class World implements ViewInterface {
 
-    private Scene world;
+    private WorldScene world;
     private WorldController controller;
     private int windowWidth = 800;
     private int windowHeight = 600;
@@ -41,6 +42,7 @@ public class World implements ViewInterface {
         g.getChildren().addAll(
                 controller.getObjects()
         );
+        g.getChildren().add(a);
 
 
 
@@ -51,6 +53,7 @@ public class World implements ViewInterface {
         ImageView imageView = new ImageView(backgroundImage);
         imageView.setFitHeight(gameMapHeight);
         imageView.setFitWidth(gameMapWidth);
+        //BackgroundImage backgroundImageView = new BackgroundImage(backgroundImage,BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, BackgroundSize.AUTO);
 
 
         SplitPane splitPane = new SplitPane();
@@ -118,7 +121,7 @@ public class World implements ViewInterface {
         // wrap the scene contents in a pannable scroll pane.
 
 
-        world = new Scene(rootAnchor, windowWidth, windowHeight);
+        world = new WorldScene(rootAnchor, windowWidth, windowHeight);
 
         // bind the preferred size of the scroll area to the size of the scene.
         scroll.prefWidthProperty().bind(world.widthProperty());
@@ -129,13 +132,7 @@ public class World implements ViewInterface {
         scroll.setVvalue(scroll.getVmin() + (scroll.getVmax() - scroll.getVmin()) / 2);
 
         //game loop
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long l) {
-                //add update method
-            }
-        };
-        timer.start();
+
         return world;
     }
 
@@ -210,7 +207,10 @@ public class World implements ViewInterface {
         return  menuBar;
     }
 
+
     public void update(){
+        numOfVillages++;
+        villageAmountText.setText("Villages: " + numOfVillages);
 
     }
 }
