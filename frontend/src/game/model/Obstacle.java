@@ -13,7 +13,6 @@ public class Obstacle extends TreeNode implements Serializable {
     private boolean horizontal;
     private boolean vertical;
     private int obstacleSize = 20;
-    private Color color = Color.BLACK;
 
     // orientation 0 is horizontal, 1 is vertical
     public Obstacle(int x, int y, int orientation, int obstacleLength) {
@@ -55,7 +54,7 @@ public class Obstacle extends TreeNode implements Serializable {
     @Override
     public Rectangle create(){
         Rectangle r = new Rectangle(this.x, this.y, this.width, this.height);
-        r.setFill(this.color);
+        r.setFill(Color.BLACK);
         return r;
     }
 }

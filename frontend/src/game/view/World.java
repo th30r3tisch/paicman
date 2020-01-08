@@ -1,6 +1,6 @@
 package game.view;
 import game.controller.WorldController;
-import javafx.animation.AnimationTimer;
+import game.model.WorldModel;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -9,9 +9,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class World implements ViewInterface {
@@ -33,10 +31,7 @@ public class World implements ViewInterface {
     @Override
     public Scene getScene() {
 
-        Group g = new Group();
-        g.getChildren().addAll(
-                controller.getObjects()
-        );
+        controller.getObjects();
 
         Menu menu = new Menu("Menu");
         MenuBar menubar = new MenuBar();
@@ -49,15 +44,14 @@ public class World implements ViewInterface {
         background.setFitHeight(gameMapHeight);
         background.setFitWidth(gameMapWidth);
 
-        StackPane stack = new StackPane();
-        stack.getChildren().setAll(
+        controller.stack.getChildren().setAll(
                 background,
                 borderPane,
-                g
+                controller.group
         );
 
         // wrap the scene contents in a pannable scroll pane.
-        ScrollPane scroll = controller.createScrollPane(stack);
+        ScrollPane scroll = controller.createScrollPane(controller.stack);
 
         world = new Scene(scroll, windowWidth, windowHeight);
 
@@ -69,41 +63,6 @@ public class World implements ViewInterface {
         scroll.setHvalue(scroll.getHmin() + (scroll.getHmax() - scroll.getHmin()) / 2);
         scroll.setVvalue(scroll.getVmin() + (scroll.getVmax() - scroll.getVmin()) / 2);
 
-        // mouse pressed
-        stack.setOnMousePressed(event -> {
-            stack.setMouseTransparent(true);
-            LOGGER.log(Level.INFO, "Event on Source: mouse pressed");
-            event.setDragDetect(true);
-        });
-
-        //drag start
-        stack.setOnDragDetected(event -> {
-            stack.startFullDrag();
-            LOGGER.log(Level.INFO, "Event on Source: drag detected");
-        });
-
-        //drag move
-        stack.setOnMouseDragged(event -> {
-            LOGGER.log(Level.INFO, "scrollcheck " + world.getX());
-            LOGGER.log(Level.INFO, "screencords " + event.getSceneX());
-            LOGGER.log(Level.INFO, "Event on Source: mouse dragged");
-            event.setDragDetect(false);
-        });
-
-        //mouse released
-        stack.setOnMouseReleased(event -> {
-            stack.setMouseTransparent(false);
-            LOGGER.log(Level.INFO, "Event on Source: mouse released");
-        });
-
-        //game loop
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long l) {
-                //add update method
-            }
-        };
-        timer.start();
         return world;
     }
 }

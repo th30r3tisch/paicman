@@ -5,13 +5,13 @@ import javafx.scene.shape.Shape;
 import java.io.Serializable;
 
 public abstract class TreeNode implements Serializable {
-    private static final long serialVersionUID = 6275678337608919167L;
-    int x,y;
+    private static final long serialVersionUID = -3883735168251464967L;
+    float x,y;
 
-    public int getX() {
+    public float getX() {
         return x;
     }
-    public int getY() {
+    public float getY() {
         return y;
     }
 

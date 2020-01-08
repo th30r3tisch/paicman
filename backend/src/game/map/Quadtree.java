@@ -54,8 +54,8 @@ public class Quadtree {
     }
 
     public void insert(TreeNode treeNode) {
-        int x = treeNode.getX();
-        int y = treeNode.getY();
+        float x = treeNode.getX();
+        float y = treeNode.getY();
         if (!this.boundry.inRange(x, y)) {
             return;
         }
@@ -95,7 +95,7 @@ public class Quadtree {
 
             for (TreeNode treeNode : tree.treeNodes) {
                 if (treeNode.inRange(startX, startY, endX, endY)){
-                    System.out.printf(" \n\t  x=%d y=%d", treeNode.getX(), treeNode.getY());
+                    System.out.printf(" \n\t  x=%f y=%f", treeNode.getX(), treeNode.getY());
                 }
             }
         }
@@ -120,7 +120,7 @@ public class Quadtree {
                 tree.boundry.getxMax(), tree.boundry.getyMax());
 
         for (TreeNode treeNode : tree.treeNodes) {
-                System.out.printf(" \n\t  x=%d y=%d", treeNode.getX(), treeNode.getY());
+                System.out.printf(" \n\t  x=%f y=%f", treeNode.getX(), treeNode.getY());
                 wholeMap.add(treeNode);
         }
         getContent(tree.northWest, startX, startY, endX, endY, wholeMap);

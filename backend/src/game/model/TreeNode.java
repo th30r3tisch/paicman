@@ -3,13 +3,13 @@ package game.model;
 import java.io.Serializable;
 
 public class TreeNode implements Serializable {
-    int x,y;
+    float x,y;
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 

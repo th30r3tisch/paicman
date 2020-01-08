@@ -26,6 +26,5 @@ public class LoginController {
         cc = new ConnectionController(player, serverIP.toString(), wc, stage);
         Thread t = new Thread(cc);
         t.start();
-
     }
 }

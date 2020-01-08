@@ -48,7 +48,7 @@ public class Town extends TreeNode implements Serializable {
             radius = 50;
         }
         Circle c = new Circle(this.x,this.y, radius);
-        c.setFill(this.color);
+        c.setFill(Color.GRAY);
         return c;
     }
 }
