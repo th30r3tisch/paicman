@@ -1,15 +1,9 @@
 package game;
 
 import game.controller.LoginController;
-import game.controller.WorldController;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import game.model.SceneName;
 import game.view.Login;
-import game.view.World;
-
-import java.util.HashMap;
 
 public class Game extends Application {
 

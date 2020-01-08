@@ -8,10 +8,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,11 +20,11 @@ public class Main {
     private static final HashMap<String, Player> names = new HashMap<>();
     private static ArrayList<Player> players = new ArrayList<>();
     private static Logger LOGGER = Logger.getLogger("InfoLogging");
+    private static Game game;
 
     public static void main(String[] args) throws Exception {
         LOGGER.log(Level.INFO,"Server is live!");
-
-        ExecutorService pool = Executors.newFixedThreadPool(100);
+        ExecutorService pool = Executors.newFixedThreadPool(32);
         ServerSocket listener = new ServerSocket(PORT);
 
         try {
@@ -52,11 +50,12 @@ public class Main {
         private ObjectOutputStream output;
         private InputStream is;
         private static Logger LOGGER = Logger.getLogger("InfoLogging");
-        private Game map;
 
         public Handler(Socket socket) {
             this.socket = socket;
-            this.map = new Game();
+            if (game == null){
+                game = new Game();
+            }
         }
 
         public void run() {
@@ -82,6 +81,9 @@ public class Main {
                             case CONNECTED:
                                 addToList();
                                 break;
+                            case SERVER:
+                                sendInitialMap();
+                                break;
                         }
                     }
                 }
@@ -90,6 +92,16 @@ public class Main {
             } finally {
                 closeConnections();
             }
+        }
+
+        private Message sendInitialMap() throws IOException{
+            Message msg = new Message();
+            msg.setNote("Initial map received");
+            msg.setType(MessageType.SERVER);
+            msg.setPlayer(player);
+            msg.setNodes(game.getAreaContent());
+            write(msg);
+            return msg;
         }
 
         private Message sendNotification() throws IOException {

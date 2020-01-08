@@ -9,37 +9,19 @@ import java.util.logging.Logger;
 
 public class Quadtree {
     final int MAX_CAPACITY =4;
-    int level = 0;
-    List<Node> nodes;
-    Quadtree northWest = null;
-    Quadtree northEast = null;
-    Quadtree southWest = null;
-    Quadtree southEast = null;
-    Boundry boundry;
+    private int level = 0;
+    private List<Node> nodes;
+    private Quadtree northWest = null;
+    private Quadtree northEast = null;
+    private Quadtree southWest = null;
+    private Quadtree southEast = null;
+    private Boundry boundry;
     private static Logger LOGGER = Logger.getLogger("InfoLogging");
 
     public Quadtree(int level, Boundry boundry) {
         this.level = level;
         nodes = new ArrayList<>();
         this.boundry = boundry;
-    }
-
-    /* Traveling the Graph using Depth First Search*/
-    static public void dfs(Quadtree tree) {
-        if (tree == null)
-            return;
-
-        System.out.printf("\nLevel = %d [X1=%d Y1=%d] \t[X2=%d Y2=%d] ",
-                tree.level, tree.boundry.getxMin(), tree.boundry.getyMin(),
-                tree.boundry.getxMax(), tree.boundry.getyMax());
-
-        for (Node node : tree.nodes) {
-            System.out.printf(" \n\t  x=%d y=%d", node.getX(), node.getY());
-        }
-        dfs(tree.northWest);
-        dfs(tree.northEast);
-        dfs(tree.southWest);
-        dfs(tree.southEast);
     }
 
     void split() {
@@ -87,7 +69,7 @@ public class Quadtree {
             split();
         }
 
-        // Check coordinates belongs to which partition
+        // Check to which partition coordinates belong
         if (this.northWest.boundry.inRange(x, y))
             this.northWest.insert(node);
         else if (this.northEast.boundry.inRange(x, y))
@@ -98,5 +80,52 @@ public class Quadtree {
             this.southEast.insert(node);
         else
             LOGGER.log(Level.SEVERE, "ERROR : Unhandled partition " + x + " " +  y);
+    }
+
+    public void getAreaContent(Quadtree tree, int startX, int startY, int endX, int endY) {
+        if (tree == null)
+            return;
+
+        if( (tree.boundry.inRange(startX, startY) && tree.boundry.inRange(endX, endY) )
+                || tree.boundry.xMin <= endX && tree.boundry.xMax <= endX && tree.boundry.yMin <= endY && tree.boundry.yMax <= endY){
+
+            System.out.printf("\nLevel = %d [X1=%d Y1=%d] \t[X2=%d Y2=%d] ",
+                    tree.level, tree.boundry.getxMin(), tree.boundry.getyMin(),
+                    tree.boundry.getxMax(), tree.boundry.getyMax());
+
+            for (Node node : tree.nodes) {
+                if (node.inRange(startX, startY, endX, endY)){
+                    System.out.printf(" \n\t  x=%d y=%d", node.getX(), node.getY());
+                }
+            }
+        }
+        getAreaContent(tree.northWest, startX, startY, endX, endY);
+        getAreaContent(tree.northEast, startX, startY, endX, endY);
+        getAreaContent(tree.southWest, startX, startY, endX, endY);
+        getAreaContent(tree.southEast, startX, startY, endX, endY);
+    }
+
+    public ArrayList<Node> getAllContent(Quadtree tree, int startX, int startY, int endX, int endY){
+        ArrayList<Node> wholeMap = new ArrayList<>();
+        getContent(tree, startX, startY, endX, endY, wholeMap);
+        return wholeMap;
+    }
+
+    public void getContent(Quadtree tree, int startX, int startY, int endX, int endY, ArrayList<Node> wholeMap) {
+        if (tree == null)
+            return;
+
+        System.out.printf("\nLevel = %d [X1=%d Y1=%d] \t[X2=%d Y2=%d] ",
+                tree.level, tree.boundry.getxMin(), tree.boundry.getyMin(),
+                tree.boundry.getxMax(), tree.boundry.getyMax());
+
+        for (Node node : tree.nodes) {
+                System.out.printf(" \n\t  x=%d y=%d", node.getX(), node.getY());
+                wholeMap.add(node);
+        }
+        getContent(tree.northWest, startX, startY, endX, endY, wholeMap);
+        getContent(tree.northEast, startX, startY, endX, endY, wholeMap);
+        getContent(tree.southWest, startX, startY, endX, endY, wholeMap);
+        getContent(tree.southEast, startX, startY, endX, endY, wholeMap);
     }
 }

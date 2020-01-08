@@ -3,7 +3,6 @@ package game.controller;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
-import javafx.stage.Stage;
 import game.view.World;
 
 import java.io.IOException;

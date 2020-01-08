@@ -35,7 +35,7 @@ public class World implements ViewInterface {
 
         Group g = new Group();
         g.getChildren().addAll(
-                //controller.getObjects()
+                controller.getObjects()
         );
 
         Menu menu = new Menu("Menu");

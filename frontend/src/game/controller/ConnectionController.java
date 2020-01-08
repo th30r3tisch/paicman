@@ -2,6 +2,7 @@ package game.controller;
 
 import game.model.Message;
 import game.model.Player;
+import game.view.World;
 
 import java.io.*;
 import java.net.Socket;
@@ -58,6 +59,7 @@ public class ConnectionController implements Runnable{
                             break;
                         case SERVER:
                             LOGGER.log(Level.INFO,"Server msg");
+                            WorldController
                             break;
                         case CONNECTED:
                             LOGGER.log(Level.INFO,"Connected msg");
