@@ -1,5 +1,6 @@
 package game.view;
 import game.controller.WorldController;
+import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -41,6 +42,7 @@ public class World implements ViewInterface {
 
         SplitPane splitPane = new SplitPane();
         splitPane.setOrientation(Orientation.HORIZONTAL);
+        Platform.runLater(()->{splitPane.setDividerPositions(0.1f);});
         splitPane.getItems().add(getInfoBox());
 
         controller.stack.getChildren().setAll(
@@ -102,40 +104,6 @@ public class World implements ViewInterface {
         return  parent;
     }
 
-    //infobox of villages
-    //should be called on click
-    private Text villageHpText;
-    private Text villageSoldierText;
-    private int villageHp = 0;
-    private int numOfVillageSoldiers = 0;
-    private VBox detailInfoBox(){
-        VBox infoBox = new VBox();
-
-        villageHpText = new Text();
-        villageHpText.setText("Village Hp: " + villageHp);
-
-        villageSoldierText = new Text();
-        villageSoldierText.setText("Number of Soldiers: " + numOfVillageSoldiers);
-
-        infoBox.getChildren().addAll(
-                villageHpText,
-                villageSoldierText
-        );
-        return infoBox;
-    }
-
-
-    private ScrollPane getGameMap(){
-        ScrollPane scrollPane = new ScrollPane();
-        Text hitPointText = new Text();
-        //exampleText
-        hitPointText.setText("hitPoint: 10");
-
-        Text numSoldierText = new Text();
-        numSoldierText.setText("Number of Soldiers: 10");
-        return scrollPane;
-    }
-
     //todo maybe add eventhandlers
     private MenuBar getMenu(){
         Menu menu = new Menu("Menu");
@@ -144,7 +112,6 @@ public class World implements ViewInterface {
         menu.getItems().add(menuItem1);
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().add(menu);
-
         return  menuBar;
     }
 
