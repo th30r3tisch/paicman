@@ -2,7 +2,7 @@ package game.model;
 
 import java.io.Serializable;
 
-public class Node implements Serializable {
+public class TreeNode implements Serializable {
     int x,y;
 
     public int getX() {
@@ -18,5 +18,5 @@ public class Node implements Serializable {
                 && this.y >= startY && this.y <= endY);
     }
 
-    Node(){ }
+    TreeNode(){ }
 }

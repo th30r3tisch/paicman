@@ -1,6 +1,6 @@
 import game.map.Boundry;
 import game.map.Quadtree;
-import game.model.Node;
+import game.model.TreeNode;
 import game.model.Obstacle;
 import game.model.Player;
 import game.model.Town;
@@ -19,7 +19,7 @@ class Game {
     private int towns = 20;
     private int gameMapHeight = 2000; // has to match with the gameMapHeight in frontend
     private int gameMapWidth = 4000; // has to match with the gameMapWidth in frontend
-    private ArrayList<Node> areaContent;
+    private ArrayList<TreeNode> areaContent;
 
     public Game() {
         this.map = new Quadtree(1, new Boundry(0, 0, gameMapWidth, gameMapHeight));
@@ -33,12 +33,8 @@ class Game {
         createTowns();
     }
      private void createTowns(){
-        Player system = new Player();
-        system.setName("system");
-        system.setColor(Color.GRAY);
          for (int i = 0; i < towns; i++){
              map.insert( new Town(
-                     system,
                      randomNumber(0, gameMapWidth),
                      randomNumber(0, gameMapHeight)
              ));
@@ -60,7 +56,7 @@ class Game {
          return r.nextInt(max - min + 1) + min;
      }
 
-     public ArrayList<Node> getAreaContent(){
+     public ArrayList<TreeNode> getAreaContent(){
          this.areaContent = map.getAllContent(map, 0,0,2000,1000);
          System.out.println("------------------------------------------------------------------");
          map.getAreaContent(map, 0,0,2000,1000);

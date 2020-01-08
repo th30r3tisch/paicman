@@ -4,7 +4,7 @@ import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Town extends Node implements Serializable {
+public class Town extends TreeNode implements Serializable {
 
     private Player owner;
     private int life;
@@ -15,10 +15,8 @@ public class Town extends Node implements Serializable {
     public void addConqueredByTown(Town town) { this.conqueredByTowns.add(town); }
     public void removeConqueredByTown(Town town) { }
 
-    public Town(Player conqueror, int x, int y) {
+    public Town(int x, int y) {
         this.life = 20;
-        this.owner = conqueror;
-        this.color = conqueror.getColor();
         this.x = x;
         this.y = y;
     }

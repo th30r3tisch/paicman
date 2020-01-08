@@ -1,6 +1,6 @@
 package game.map;
 
-import game.model.Node;
+import game.model.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 public class Quadtree {
     final int MAX_CAPACITY =4;
     private int level = 0;
-    private List<Node> nodes;
+    private List<TreeNode> treeNodes;
     private Quadtree northWest = null;
     private Quadtree northEast = null;
     private Quadtree southWest = null;
@@ -20,7 +20,7 @@ public class Quadtree {
 
     public Quadtree(int level, Boundry boundry) {
         this.level = level;
-        nodes = new ArrayList<>();
+        treeNodes = new ArrayList<>();
         this.boundry = boundry;
     }
 
@@ -53,15 +53,15 @@ public class Quadtree {
 
     }
 
-    public void insert(Node node) {
-        int x = node.getX();
-        int y = node.getY();
+    public void insert(TreeNode treeNode) {
+        int x = treeNode.getX();
+        int y = treeNode.getY();
         if (!this.boundry.inRange(x, y)) {
             return;
         }
 
-        if (nodes.size() < MAX_CAPACITY) {
-            nodes.add(node);
+        if (treeNodes.size() < MAX_CAPACITY) {
+            treeNodes.add(treeNode);
             return;
         }
         // Exceeded the capacity so split it in FOUR
@@ -71,13 +71,13 @@ public class Quadtree {
 
         // Check to which partition coordinates belong
         if (this.northWest.boundry.inRange(x, y))
-            this.northWest.insert(node);
+            this.northWest.insert(treeNode);
         else if (this.northEast.boundry.inRange(x, y))
-            this.northEast.insert(node);
+            this.northEast.insert(treeNode);
         else if (this.southWest.boundry.inRange(x, y))
-            this.southWest.insert(node);
+            this.southWest.insert(treeNode);
         else if (this.southEast.boundry.inRange(x, y))
-            this.southEast.insert(node);
+            this.southEast.insert(treeNode);
         else
             LOGGER.log(Level.SEVERE, "ERROR : Unhandled partition " + x + " " +  y);
     }
@@ -93,9 +93,9 @@ public class Quadtree {
                     tree.level, tree.boundry.getxMin(), tree.boundry.getyMin(),
                     tree.boundry.getxMax(), tree.boundry.getyMax());
 
-            for (Node node : tree.nodes) {
-                if (node.inRange(startX, startY, endX, endY)){
-                    System.out.printf(" \n\t  x=%d y=%d", node.getX(), node.getY());
+            for (TreeNode treeNode : tree.treeNodes) {
+                if (treeNode.inRange(startX, startY, endX, endY)){
+                    System.out.printf(" \n\t  x=%d y=%d", treeNode.getX(), treeNode.getY());
                 }
             }
         }
@@ -105,13 +105,13 @@ public class Quadtree {
         getAreaContent(tree.southEast, startX, startY, endX, endY);
     }
 
-    public ArrayList<Node> getAllContent(Quadtree tree, int startX, int startY, int endX, int endY){
-        ArrayList<Node> wholeMap = new ArrayList<>();
+    public ArrayList<TreeNode> getAllContent(Quadtree tree, int startX, int startY, int endX, int endY){
+        ArrayList<TreeNode> wholeMap = new ArrayList<>();
         getContent(tree, startX, startY, endX, endY, wholeMap);
         return wholeMap;
     }
 
-    public void getContent(Quadtree tree, int startX, int startY, int endX, int endY, ArrayList<Node> wholeMap) {
+    public void getContent(Quadtree tree, int startX, int startY, int endX, int endY, ArrayList<TreeNode> wholeMap) {
         if (tree == null)
             return;
 
@@ -119,9 +119,9 @@ public class Quadtree {
                 tree.level, tree.boundry.getxMin(), tree.boundry.getyMin(),
                 tree.boundry.getxMax(), tree.boundry.getyMax());
 
-        for (Node node : tree.nodes) {
-                System.out.printf(" \n\t  x=%d y=%d", node.getX(), node.getY());
-                wholeMap.add(node);
+        for (TreeNode treeNode : tree.treeNodes) {
+                System.out.printf(" \n\t  x=%d y=%d", treeNode.getX(), treeNode.getY());
+                wholeMap.add(treeNode);
         }
         getContent(tree.northWest, startX, startY, endX, endY, wholeMap);
         getContent(tree.northEast, startX, startY, endX, endY, wholeMap);

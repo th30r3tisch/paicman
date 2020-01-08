@@ -1,22 +1,25 @@
 package game.controller;
 
+import game.model.TreeNode;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Shape;
 import game.view.World;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class WorldController {
 
-    private ArrayList<Shape> nodes;
+    private ArrayList<Node> nodes = new ArrayList<>();
+    private static Logger LOGGER = Logger.getLogger("InfoLogging");
 
     /**
      * Inject the stage from {@link World}
      */
-    public WorldController() {
-    }
+    public WorldController() { }
 
     /** @return a ScrollPane which scrolls the layout. */
     public ScrollPane createScrollPane(Pane layout) {
@@ -28,14 +31,17 @@ public class WorldController {
         return scroll;
     }
 
-    public ArrayList<Shape> getObjects(){
-        nodes = new ArrayList<>();
+    public void getObjects(){
         try {
-            ConnectionController.getMap();
+            ConnectionController.mapRequest();
         } catch (IOException e){
-
+            LOGGER.log(Level.SEVERE, "Could not rend request: ", e);
         }
+    }
 
-        return nodes;
+    public void setNodes(ArrayList<TreeNode> nodes) {
+        for (TreeNode node: nodes) {
+            this.nodes.add(node.create());
+        }
     }
 }

@@ -2,6 +2,7 @@ import game.model.Message;
 import game.model.MessageType;
 import game.model.Player;
 
+import java.awt.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -83,6 +84,7 @@ public class Main {
                                 break;
                             case SERVER:
                                 sendInitialMap();
+                                LOGGER.log(Level.INFO, "Map sent to " + name);
                                 break;
                         }
                     }
@@ -99,7 +101,7 @@ public class Main {
             msg.setNote("Initial map received");
             msg.setType(MessageType.SERVER);
             msg.setPlayer(player);
-            msg.setNodes(game.getAreaContent());
+            msg.setTreeNodes(game.getAreaContent());
             write(msg);
             return msg;
         }
@@ -193,6 +195,7 @@ public class Main {
             if (!names.containsKey(name)) {
                 player = new Player();
                 player.setName(name);
+                player.setColor(Color.BLUE);
                 players.add(player);
                 names.put(name, player);
 

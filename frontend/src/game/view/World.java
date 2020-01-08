@@ -25,8 +25,8 @@ public class World implements ViewInterface {
     private Image backgroundImage;
     private static Logger LOGGER = Logger.getLogger("InfoLogging");
 
-    public World() {
-        this.controller = new WorldController();
+    public World(WorldController wc) {
+        this.controller = wc;
         backgroundImage = new Image("assets/map.jpg");
     }
 

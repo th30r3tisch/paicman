@@ -1,7 +1,5 @@
 package game.model;
 
-import game.model.world_objects.Node;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -10,7 +8,7 @@ public class Message implements Serializable {
     private MessageType type;
     private Player player;
     private String note;
-    private ArrayList<Node> nodes;
+    private ArrayList<TreeNode> treeNodes;
 
     public MessageType getType() {
         return type;
@@ -33,6 +31,6 @@ public class Message implements Serializable {
         this.note = note;
     }
 
-    public ArrayList<Node> getNodes() { return nodes; }
-    public void setNodes(ArrayList<Node> nodes) { this.nodes = nodes; }
+    public ArrayList<TreeNode> getTreeNodes() { return treeNodes; }
+    public void setTreeNodes(ArrayList<TreeNode> treeNodes) { this.treeNodes = treeNodes; }
 }

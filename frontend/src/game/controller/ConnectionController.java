@@ -3,6 +3,8 @@ package game.controller;
 import game.model.Message;
 import game.model.Player;
 import game.view.World;
+import javafx.application.Platform;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.Socket;
@@ -23,11 +25,15 @@ public class ConnectionController implements Runnable{
     private OutputStream outputStream;
     private static Logger LOGGER = Logger.getLogger("InfoLogging");
     private static Player player;
+    private WorldController wc;
+    private Stage stage;
 
-    public ConnectionController(Player player, String serverAddress) {
+    public ConnectionController(Player player, String serverAddress, WorldController wc, Stage stage) {
         this.serverAddress = serverAddress;
         this.port = 59001;
         ConnectionController.player = player;
+        this.wc = wc;
+        this.stage = stage;
     }
 
     public void run() {
@@ -59,10 +65,11 @@ public class ConnectionController implements Runnable{
                             break;
                         case SERVER:
                             LOGGER.log(Level.INFO,"Server msg");
-                            WorldController
+                            wc.setNodes(message.getTreeNodes());
                             break;
                         case CONNECTED:
                             LOGGER.log(Level.INFO,"Connected msg");
+                            Platform.runLater(()->{ stage.setScene(new World(wc).getScene());});
                             break;
                         case DISCONNECTED:
                             LOGGER.log(Level.INFO,"Disconnected msg");
@@ -83,7 +90,7 @@ public class ConnectionController implements Runnable{
         oos.writeObject(loginmsg);
     }
 
-    public static void getMap() throws IOException{
+    public static void mapRequest() throws IOException{
         Message mapRequest = new Message();
         mapRequest.setPlayer(player);
         mapRequest.setType(SERVER);

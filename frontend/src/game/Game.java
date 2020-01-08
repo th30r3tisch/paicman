@@ -1,6 +1,7 @@
 package game;
 
 import game.controller.LoginController;
+import game.controller.WorldController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import game.view.Login;
@@ -9,7 +10,8 @@ public class Game extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        LoginController lc = new LoginController(primaryStage);
+        WorldController wc = new WorldController();
+        LoginController lc = new LoginController(primaryStage, wc);
 
         primaryStage.setTitle("Conquer all towns");
         primaryStage.setResizable(false);
