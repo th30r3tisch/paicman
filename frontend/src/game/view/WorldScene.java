@@ -1,5 +1,6 @@
-package game.controller;
+package game.view;
 
+import game.controller.WorldController;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.*;

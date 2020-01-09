@@ -60,8 +60,8 @@ public class World implements ViewInterface {
         vBox.getChildren().addAll(
                 borderPane,
                 splitPane
-
         );
+
         rootAnchor.getChildren().addAll(
                 vBox
         );

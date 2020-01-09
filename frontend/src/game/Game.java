@@ -1,9 +1,6 @@
 package game;
 
 import game.controller.LoginController;
-import game.controller.WorldController;
-import game.controller.WorldScene;
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import game.view.Login;
