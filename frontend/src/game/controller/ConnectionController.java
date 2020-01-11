@@ -69,7 +69,7 @@ public class ConnectionController implements Runnable{
                             break;
                         case CONNECTED:
                             LOGGER.log(Level.INFO,"Connected msg");
-                            Platform.runLater(()->{ stage.setScene(new World(wc).getScene());});
+                            Platform.runLater(()->{ stage.setScene(wc.getScene());});
                             break;
                         case DISCONNECTED:
                             LOGGER.log(Level.INFO,"Disconnected msg");
@@ -88,6 +88,10 @@ public class ConnectionController implements Runnable{
         loginmsg.setType(CONNECTED);
         loginmsg.setNote("has connected");
         oos.writeObject(loginmsg);
+    }
+
+    public static Player getPlayer() {
+        return player;
     }
 
     public static void mapRequest() throws IOException{

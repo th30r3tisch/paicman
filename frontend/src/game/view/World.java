@@ -1,15 +1,24 @@
 package game.view;
 import game.controller.WorldController;
+import game.model.Player;
+import game.model.Town;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
 import java.util.logging.Logger;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 public class World implements ViewInterface {
@@ -45,6 +54,9 @@ public class World implements ViewInterface {
         Platform.runLater(()->{splitPane.setDividerPositions(0.1f);});
         splitPane.getItems().add(getInfoBox());
 
+        for (Node n : controller.group.getChildren()){
+
+        }
         controller.stack.getChildren().setAll(
                 imageView,
                 controller.group
@@ -52,7 +64,7 @@ public class World implements ViewInterface {
 
         // wrap the scene contents in a pannable scroll pane.
         ScrollPane scroll = controller.createScrollPane(controller.stack);
-        scroll.setPannable(true);
+        //scroll.setPannable(true);
         splitPane.getItems().add(scroll);
 
         AnchorPane rootAnchor = new AnchorPane();
@@ -81,31 +93,38 @@ public class World implements ViewInterface {
 
     //infobox of current player status
     //todo get these number from server eventually
-    private Text villageAmountText;
+    private Text townAmountText;
     private Text numSoldierText;
-    private int numOfVillages = 0;
+    private Text ownerText;
+    private int numOfTowns = 0;
     private int numOfSoldiers = 0;
     private AnchorPane getInfoBox(){
         AnchorPane parent = new AnchorPane();
         VBox infoBox = new VBox();
-        villageAmountText = new Text();
+        townAmountText = new Text();
         //exampleText
-        villageAmountText.setText("Villages: " + numOfVillages);
+        townAmountText.setText("Your Towns: " + numOfTowns);
 
         numSoldierText = new Text();
-        numSoldierText.setText("Number of Soldiers: " + numOfSoldiers);
+        ownerText = new Text();
 
+        VBox detailBox = new VBox();
+        detailBox.setStyle("-fx-background-color: #FFFFFF;");
+        detailBox.setBackground(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY, Insets.EMPTY)));
         infoBox.getChildren().addAll(
-                villageAmountText,
+                townAmountText,
+                ownerText,
                 numSoldierText
         );
+
+
         parent.getChildren().add(infoBox);
 
         return  parent;
     }
 
     //todo maybe add eventhandlers
-    private MenuBar getMenu(){
+    public MenuBar getMenu(){
         Menu menu = new Menu("Menu");
         MenuItem menuItem1 = new MenuItem();
         menuItem1.setText("test");
@@ -115,10 +134,23 @@ public class World implements ViewInterface {
         return  menuBar;
     }
 
+    public void updatePlayerStat(Player player){
+        townAmountText.setText("Your Towns: " +   player.getOwnedTowns().size());
+    }
+
+    public void updateTownDisplay(Town town){
+        System.out.println("update town " + town.getLife());
+        String text = "Not conquered";
+        if(town.getOwner() != null){
+            text = town.getOwner().getName();
+        }
+        ownerText.setText("Owner: " +  text);
+        numSoldierText.setText("Town health: " + town.getLife());
+    }
 
     public void update(){
-        numOfVillages++;
-        villageAmountText.setText("Villages: " + numOfVillages);
+        numOfTowns++;
+        townAmountText.setText("Villages: " + numOfTowns);
 
     }
 }
