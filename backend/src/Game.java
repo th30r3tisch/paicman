@@ -2,10 +2,8 @@ import game.map.Boundry;
 import game.map.Quadtree;
 import game.model.TreeNode;
 import game.model.Obstacle;
-import game.model.Player;
 import game.model.Town;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
@@ -19,6 +17,7 @@ class Game {
     private int towns = 20;
     private int gameMapHeight = 2000; // has to match with the gameMapHeight in frontend
     private int gameMapWidth = 4000; // has to match with the gameMapWidth in frontend
+    private int distanceToEdge = 100;
     private ArrayList<TreeNode> areaContent;
 
     public Game() {
@@ -35,8 +34,8 @@ class Game {
      private void createTowns(){
          for (int i = 0; i < towns; i++){
              map.insert( new Town(
-                     randomNumber(0, gameMapWidth),
-                     randomNumber(0, gameMapHeight)
+                     randomNumber(distanceToEdge, gameMapWidth - distanceToEdge),
+                     randomNumber(distanceToEdge, gameMapHeight - distanceToEdge)
              ));
          }
      }
@@ -44,8 +43,8 @@ class Game {
      private void createObstacles(){
          for (int i = 0; i < obstacles; i++){
              map.insert(new Obstacle(
-                     randomNumber(0, gameMapWidth),
-                     randomNumber(0, gameMapHeight),
+                     randomNumber(distanceToEdge, gameMapWidth - distanceToEdge),
+                     randomNumber(distanceToEdge, gameMapHeight - distanceToEdge),
                      randomNumber(0, 1),
                      randomNumber(50, 400)));
          }

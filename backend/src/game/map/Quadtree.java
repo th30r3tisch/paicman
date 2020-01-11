@@ -20,7 +20,7 @@ public class Quadtree {
 
     public Quadtree(int level, Boundry boundry) {
         this.level = level;
-        treeNodes = new ArrayList<>();
+        this.treeNodes = new ArrayList<>();
         this.boundry = boundry;
     }
 
