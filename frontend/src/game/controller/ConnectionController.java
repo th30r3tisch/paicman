@@ -2,12 +2,13 @@ package game.controller;
 
 import game.model.Message;
 import game.model.Player;
-import game.view.World;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.channels.SocketChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,7 +66,7 @@ public class ConnectionController implements Runnable{
                             break;
                         case SERVER:
                             LOGGER.log(Level.INFO,"Server msg");
-                            wc.setNodes(message.getTreeNodes());
+                            wc.addNodes(message.getTreeNodes());
                             break;
                         case CONNECTED:
                             LOGGER.log(Level.INFO,"Connected msg");

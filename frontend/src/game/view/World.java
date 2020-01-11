@@ -109,8 +109,11 @@ public class World implements ViewInterface {
         ownerText = new Text();
 
         VBox detailBox = new VBox();
-        detailBox.setStyle("-fx-background-color: #FFFFFF;");
+
+        //not working yet
+        detailBox.setStyle("-fx-background-color: #FFFAAAA;");
         detailBox.setBackground(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY, Insets.EMPTY)));
+
         infoBox.getChildren().addAll(
                 townAmountText,
                 ownerText,
@@ -149,8 +152,6 @@ public class World implements ViewInterface {
     }
 
     public void update(){
-        numOfTowns++;
-        townAmountText.setText("Villages: " + numOfTowns);
 
     }
 }

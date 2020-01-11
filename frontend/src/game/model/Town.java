@@ -13,10 +13,14 @@ public class Town extends TreeNode implements Serializable {
     private Player owner;
     private int life;
     private Color color;
-    private ArrayList<Town> conqueredByTowns;
+    private ArrayList<Town> conqueredByTowns = new ArrayList<>();;
 
     public ArrayList<Town> getConqueredByTowns() { return conqueredByTowns; }
-    public void addConqueredByTown(Town town) { this.conqueredByTowns.add(town); }
+    public void addConqueredByTown(Town town) {
+        System.out.println("conquered List " + conqueredByTowns);
+        if(conqueredByTowns == null) conqueredByTowns = new ArrayList<>();
+        this.conqueredByTowns.add(town);
+    }
     public void removeConqueredByTown(Town town) { }
 
     public Town(Player conqueror, int x, int y) {

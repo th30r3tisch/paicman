@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Material;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 
 
@@ -65,7 +66,7 @@ public class WorldController {
         }
     }
 
-    public void setNodes(ArrayList<TreeNode> nodes) {
+    public void addNodes(ArrayList<TreeNode> nodes) {
         for (TreeNode node : nodes) {
             wm.addNodes(node);
         }
@@ -75,43 +76,54 @@ public class WorldController {
         return wm.getTreeNodes();
     }
 
+    private Town currentSelect;
+
     public ArrayList<Shape> setUpShapes() {
         ArrayList<Shape> shapes = new ArrayList<>();
         for (TreeNode tn : wm.getTreeNodes()) {
             if (tn instanceof Town) {
 
                 //System.out.println("can be dragged");
-                Town t = (Town) tn;
-                Shape s = t.create();
+                Town town = (Town) tn;
+                Shape shape = town.create();
                 //todo check if playertown and add events
                 Player player = ConnectionController.getPlayer();
+
+                if(currentSelect == town){
+                    shape.setStrokeWidth(3);
+                    shape.setStroke(Color.RED);
+                }
                 //if (t.getOwner() == player) {
                     final Delta dragDelta = new Delta();
-                    s.setOnMousePressed(new EventHandler<MouseEvent>() {
+                    shape.setOnMousePressed(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent mouseEvent) {
                             // record a delta distance for the drag and drop operation.
-                            dragDelta.x = s.getLayoutX() - mouseEvent.getSceneX();
-                            dragDelta.y = s.getLayoutY() - mouseEvent.getSceneY();
-                            s.setCursor(Cursor.NONE);
-                            world.updateTownDisplay(t);
+                            dragDelta.x = shape.getLayoutX() - mouseEvent.getSceneX();
+                            dragDelta.y = shape.getLayoutY() - mouseEvent.getSceneY();
+                            shape.setCursor(Cursor.MOVE);
+                            world.updateTownDisplay(town);
+                            System.out.println("click event");
 
-                            //todo colo
-                            s.setStrokeWidth(3);
-                            s.setStroke(Color.RED);
+                            if(currentSelect == null) {
+                                currentSelect = town;
+                                shape.setStrokeWidth(3);
+                                shape.setStroke(Color.RED);
+                            } else if(currentSelect != town){
+                                town.addConqueredByTown(currentSelect);
+                                //TODO add check if legal move
+                                for (Town attacker: town.getConqueredByTowns()) {
+                                    Line line = new Line(attacker.getX(), attacker.getY(), town.getX(), town.getY());
+                                    line.setStrokeWidth(5);
+                                    lineList.add(line);
+                                }
+                                currentSelect = null;
+                            }
+                            else currentSelect = null;
+
                         }
                     });
-
-                    s.setOnMouseDragged(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent mouseEvent) {
-                            s.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
-                            s.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
-                            checkShapeIntersection(s);
-                        }
-                    });
-                //}
-                shapes.add(s);
+                shapes.add(shape);
             } else {
                 shapes.add(tn.create());
             }
@@ -120,6 +132,7 @@ public class WorldController {
         return shapes;
     }
 
+    ArrayList<Shape> lineList = new ArrayList<>();
     public void startUpdater() {
 
         Thread thread = new Thread(() -> {
@@ -127,7 +140,7 @@ public class WorldController {
                 if(!group.getChildren().equals(setUpShapes())){
                     group.getChildren().clear();
                     group.getChildren().addAll(setUpShapes());
-                    System.out.println("updating");
+                    group.getChildren().addAll(lineList);
                 }
             };
 
