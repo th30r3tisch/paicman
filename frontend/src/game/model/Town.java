@@ -1,11 +1,15 @@
 package game.model;
 
+import game.controller.ConnectionController;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Town extends TreeNode implements Serializable {
     private static final long serialVersionUID = 50448042662163715L;
@@ -16,12 +20,23 @@ public class Town extends TreeNode implements Serializable {
     private ArrayList<Town> conqueredByTowns = new ArrayList<>();;
 
     public ArrayList<Town> getConqueredByTowns() { return conqueredByTowns; }
-    public void addConqueredByTown(Town town) {
-        System.out.println("conquered List " + conqueredByTowns);
+    public void addConqueredByTown(Town town){
+        ArrayList<TreeNode> list = new ArrayList();
+        list.add(town);
+        list.add(this);
+        ConnectionController.attackRequest(list);
         if(conqueredByTowns == null) conqueredByTowns = new ArrayList<>();
         this.conqueredByTowns.add(town);
     }
-    public void removeConqueredByTown(Town town) { }
+
+    public void removeConqueredByTown(Town town) {
+        ArrayList<TreeNode> list = new ArrayList();
+        list.add(town);
+        list.add(this);
+        ConnectionController.removeAttackRequest(list);
+        System.out.println("town in list? " + this.getConqueredByTowns().contains(town));
+        this.conqueredByTowns.remove(town);
+    }
 
     public Town(Player conqueror, int x, int y) {
         this.life = 20;

@@ -10,6 +10,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import game.view.World;
@@ -89,40 +90,70 @@ public class WorldController {
                 //todo check if playertown and add events
                 Player player = ConnectionController.getPlayer();
 
-                if(currentSelect == town){
-                    shape.setStrokeWidth(3);
+                if (currentSelect == town) {
+                    shape.setStrokeWidth(5);
                     shape.setStroke(Color.RED);
                 }
                 //if (t.getOwner() == player) {
-                    final Delta dragDelta = new Delta();
-                    shape.setOnMousePressed(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent mouseEvent) {
-                            // record a delta distance for the drag and drop operation.
-                            dragDelta.x = shape.getLayoutX() - mouseEvent.getSceneX();
-                            dragDelta.y = shape.getLayoutY() - mouseEvent.getSceneY();
-                            shape.setCursor(Cursor.MOVE);
-                            world.updateTownDisplay(town);
-                            System.out.println("click event");
+                final Delta dragDelta = new Delta();
+                shape.setOnMousePressed(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        // record a delta distance for the drag and drop operation.
+                        dragDelta.x = shape.getLayoutX() - mouseEvent.getSceneX();
+                        dragDelta.y = shape.getLayoutY() - mouseEvent.getSceneY();
+                        shape.setCursor(Cursor.MOVE);
+                        world.updateTownDisplay(town);
+                        System.out.println("click event");
+                        if (currentSelect == null) {
+                            currentSelect = town;
+                            shape.setStrokeWidth(3);
+                            shape.setStroke(Color.RED);
+                        } else if (currentSelect != town) {
+                            town.addConqueredByTown(currentSelect);
+                            //TODO add check if legal move
+                            currentSelect = null;
+                        } else currentSelect = null;
+                    }
+                });
 
-                            if(currentSelect == null) {
-                                currentSelect = town;
-                                shape.setStrokeWidth(3);
-                                shape.setStroke(Color.RED);
-                            } else if(currentSelect != town){
-                                town.addConqueredByTown(currentSelect);
-                                //TODO add check if legal move
-                                for (Town attacker: town.getConqueredByTowns()) {
-                                    Line line = new Line(attacker.getX(), attacker.getY(), town.getX(), town.getY());
-                                    line.setStrokeWidth(5);
-                                    lineList.add(line);
+                if (town.getConqueredByTowns() != null) {
+                    for (Town attacker : town.getConqueredByTowns()) {
+                        Line line = new Line(attacker.getX(), attacker.getY(), town.getX(), town.getY());
+
+                        line.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                MouseButton button = mouseEvent.getButton();
+                                switch (button) {
+                                    case SECONDARY:
+                                        System.out.println("right click");
+                                        ArrayList<TreeNode> treeNodes = wm.getTreeNodes();
+                                        Town attacker = null;
+                                        Town attacked = null;
+                                        int counter = 0;
+                                        while (attacker == null || attacked == null) {
+                                            if (treeNodes.get(counter) instanceof Town) {
+                                                Town currentTown = (Town) treeNodes.get(counter);
+                                                System.out.println("line y " + currentTown.getY());
+                                                if (currentTown.getX() == line.getStartX() && currentTown.getY() == line.getStartY())
+                                                    attacker = currentTown;
+                                                else if (currentTown.getX() == line.getEndX() && currentTown.getY() == line.getEndY())
+                                                    attacked = currentTown;
+                                            }
+                                            counter++;
+                                        }
+                                        attacked.removeConqueredByTown(attacker);
+                                        break;
+                                    default:
+                                        System.out.println("something click");
                                 }
-                                currentSelect = null;
                             }
-                            else currentSelect = null;
-
-                        }
-                    });
+                        });
+                        line.setStrokeWidth(8);
+                        shapes.add(line);
+                    }
+                }
                 shapes.add(shape);
             } else {
                 shapes.add(tn.create());
@@ -132,15 +163,14 @@ public class WorldController {
         return shapes;
     }
 
-    ArrayList<Shape> lineList = new ArrayList<>();
+
     public void startUpdater() {
 
         Thread thread = new Thread(() -> {
             Runnable updater = () -> {
-                if(!group.getChildren().equals(setUpShapes())){
+                if (!group.getChildren().equals(setUpShapes())) {
                     group.getChildren().clear();
                     group.getChildren().addAll(setUpShapes());
-                    group.getChildren().addAll(lineList);
                 }
             };
 
@@ -161,7 +191,7 @@ public class WorldController {
         boolean collisionDetected = false;
         //System.out.println("moving");
         ArrayList<Shape> shapes = wm.getShapes();
-        for (Shape static_bloc :  shapes){
+        for (Shape static_bloc : shapes) {
             if (static_bloc != block) {
                 System.out.println("check block " + static_bloc.getTranslateX());
                 static_bloc.setFill(static_bloc.getFill());
@@ -182,7 +212,7 @@ public class WorldController {
     }
 
 
-    public Scene getScene(){
+    public Scene getScene() {
         return world.getScene();
     }
 

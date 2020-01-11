@@ -2,6 +2,7 @@ package game.controller;
 
 import game.model.Message;
 import game.model.Player;
+import game.model.TreeNode;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
@@ -9,11 +10,11 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static game.model.MessageType.CONNECTED;
-import static game.model.MessageType.SERVER;
+import static game.model.MessageType.*;
 
 // is responsible for handling all the connections
 public class ConnectionController implements Runnable{
@@ -102,5 +103,31 @@ public class ConnectionController implements Runnable{
         mapRequest.setNote(player.getName() + " needs the map.");
         oos.writeObject(mapRequest);
         oos.flush();
+    }
+
+    public static void attackRequest(ArrayList nodes){
+        Message mapRequest = new Message();
+        mapRequest.setPlayer(player);
+        mapRequest.setType(ATTACK);
+        mapRequest.setTreeNodes(nodes);
+        try {
+            oos.writeObject(mapRequest);
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeAttackRequest(ArrayList nodes) {
+        Message mapRequest = new Message();
+        mapRequest.setPlayer(player);
+        mapRequest.setType(REMOVEATTACK);
+        mapRequest.setTreeNodes(nodes);
+        try {
+            oos.writeObject(mapRequest);
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
