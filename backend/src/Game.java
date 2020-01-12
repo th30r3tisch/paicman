@@ -56,9 +56,7 @@ class Game {
      }
 
      public ArrayList<TreeNode> getAreaContent(){
-         this.areaContent = map.getAllContent(map, 0,0,2000,1000);
-         System.out.println("------------------------------------------------------------------");
-         map.getAreaContent(map, 0,0,2000,1000);
+         this.areaContent = map.getAllContent(map, 0,0,4000,2000);
          return areaContent;
      }
 }

@@ -16,16 +16,12 @@ import javafx.scene.layout.Pane;
 import game.view.World;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Material;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -162,7 +158,6 @@ public class WorldController {
         wm.setShapes(shapes);
         return shapes;
     }
-
 
     public void startUpdater() {
 

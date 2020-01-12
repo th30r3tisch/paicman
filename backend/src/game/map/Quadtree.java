@@ -82,50 +82,25 @@ public class Quadtree {
             LOGGER.log(Level.SEVERE, "ERROR : Unhandled partition " + x + " " +  y);
     }
 
-    public void getAreaContent(Quadtree tree, int startX, int startY, int endX, int endY) {
-        if (tree == null)
-            return;
+    public void getAreaContent(Quadtree tree, int startX, int startY, int endX, int endY, ArrayList<TreeNode> wholeMap) {
+        if (tree == null) return;
 
-        if( (tree.boundry.inRange(startX, startY) && tree.boundry.inRange(endX, endY) )
-                || tree.boundry.xMin <= endX && tree.boundry.xMax <= endX && tree.boundry.yMin <= endY && tree.boundry.yMax <= endY){
-
-            System.out.printf("\nLevel = %d [X1=%d Y1=%d] \t[X2=%d Y2=%d] ",
-                    tree.level, tree.boundry.getxMin(), tree.boundry.getyMin(),
-                    tree.boundry.getxMax(), tree.boundry.getyMax());
-
+        if( !(startX > tree.boundry.xMax) && !(endX < tree.boundry.xMin) && !(startY > tree.boundry.yMax) && !(endY < tree.boundry.yMin)){
             for (TreeNode treeNode : tree.treeNodes) {
                 if (treeNode.inRange(startX, startY, endX, endY)){
-                    System.out.printf(" \n\t  x=%f y=%f", treeNode.getX(), treeNode.getY());
+                    wholeMap.add(treeNode);
                 }
             }
         }
-        getAreaContent(tree.northWest, startX, startY, endX, endY);
-        getAreaContent(tree.northEast, startX, startY, endX, endY);
-        getAreaContent(tree.southWest, startX, startY, endX, endY);
-        getAreaContent(tree.southEast, startX, startY, endX, endY);
+        getAreaContent(tree.northWest, startX, startY, endX, endY, wholeMap);
+        getAreaContent(tree.northEast, startX, startY, endX, endY, wholeMap);
+        getAreaContent(tree.southWest, startX, startY, endX, endY, wholeMap);
+        getAreaContent(tree.southEast, startX, startY, endX, endY, wholeMap);
     }
 
     public ArrayList<TreeNode> getAllContent(Quadtree tree, int startX, int startY, int endX, int endY){
         ArrayList<TreeNode> wholeMap = new ArrayList<>();
-        getContent(tree, startX, startY, endX, endY, wholeMap);
+        getAreaContent(tree, startX, startY, endX, endY, wholeMap);
         return wholeMap;
-    }
-
-    public void getContent(Quadtree tree, int startX, int startY, int endX, int endY, ArrayList<TreeNode> wholeMap) {
-        if (tree == null)
-            return;
-
-        System.out.printf("\nLevel = %d [X1=%d Y1=%d] \t[X2=%d Y2=%d] ",
-                tree.level, tree.boundry.getxMin(), tree.boundry.getyMin(),
-                tree.boundry.getxMax(), tree.boundry.getyMax());
-
-        for (TreeNode treeNode : tree.treeNodes) {
-                System.out.printf(" \n\t  x=%f y=%f", treeNode.getX(), treeNode.getY());
-                wholeMap.add(treeNode);
-        }
-        getContent(tree.northWest, startX, startY, endX, endY, wholeMap);
-        getContent(tree.northEast, startX, startY, endX, endY, wholeMap);
-        getContent(tree.southWest, startX, startY, endX, endY, wholeMap);
-        getContent(tree.southEast, startX, startY, endX, endY, wholeMap);
     }
 }
