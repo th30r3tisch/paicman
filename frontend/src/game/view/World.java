@@ -64,7 +64,6 @@ public class World implements ViewInterface {
 
         // wrap the scene contents in a pannable scroll pane.
         ScrollPane scroll = controller.createScrollPane(controller.stack);
-        //scroll.setPannable(true);
         splitPane.getItems().add(scroll);
 
         AnchorPane rootAnchor = new AnchorPane();
@@ -124,7 +123,7 @@ public class World implements ViewInterface {
 
         return  parent;
     }
-    
+
     public MenuBar getMenu(){
         Menu menu = new Menu("Menu");
         MenuItem menuItem1 = new MenuItem();

@@ -53,7 +53,7 @@ public class WorldController {
         ScrollPane scroll = new ScrollPane();
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scroll.setPannable(false);
+        scroll.setPannable(true);
         scroll.setContent(layout);
         return scroll;
     }
