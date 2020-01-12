@@ -1,5 +1,7 @@
 package game.model;
 
+import game.model.map.TreeNode;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 

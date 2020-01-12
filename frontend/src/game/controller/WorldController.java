@@ -1,9 +1,9 @@
 package game.controller;
 
 import game.model.Player;
-import game.model.Town;
-import game.model.TreeNode;
-import game.model.WorldModel;
+import game.model.map.Town;
+import game.model.map.TreeNode;
+import game.model.map.WorldModel;
 import javafx.application.Platform;
 import javafx.scene.Cursor;
 import javafx.scene.Group;

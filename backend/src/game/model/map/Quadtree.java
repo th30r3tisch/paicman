@@ -1,6 +1,4 @@
-package game.map;
-
-import game.model.TreeNode;
+package game.model.map;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package game.model;
+package game.model.map;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -6,7 +6,7 @@ import javafx.scene.shape.Rectangle;
 import java.io.Serializable;
 
 public class Obstacle extends TreeNode implements Serializable {
-    private static final long serialVersionUID = -5996449674723651911L;
+    private static final long serialVersionUID = -1460664731759978414L;
 
     private int width;
     private int height;

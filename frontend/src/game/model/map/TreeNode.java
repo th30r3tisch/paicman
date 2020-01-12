@@ -1,14 +1,16 @@
-package game.model;
+package game.model.map;
+
+import javafx.scene.shape.Shape;
 
 import java.io.Serializable;
 
-public class TreeNode implements Serializable {
+public abstract class TreeNode implements Serializable {
+    private static final long serialVersionUID = 4467335650668243334L;
     float x,y;
 
     public float getX() {
         return x;
     }
-
     public float getY() {
         return y;
     }
@@ -19,4 +21,6 @@ public class TreeNode implements Serializable {
     }
 
     TreeNode(){ }
+
+    public abstract Shape create();
 }

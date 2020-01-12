@@ -1,6 +1,7 @@
-package game.model;
+package game.model.map;
 
 import game.controller.ConnectionController;
+import game.model.Player;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
@@ -9,7 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Town extends TreeNode implements Serializable {
-    private static final long serialVersionUID = 50448042662163715L;
+    private static final long serialVersionUID = -6888113389669325015L;
 
     private Player owner;
     private int life;

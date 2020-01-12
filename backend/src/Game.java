@@ -1,8 +1,8 @@
-import game.map.Boundry;
-import game.map.Quadtree;
-import game.model.TreeNode;
-import game.model.Obstacle;
-import game.model.Town;
+import game.model.map.Boundry;
+import game.model.map.Quadtree;
+import game.model.map.TreeNode;
+import game.model.map.Obstacle;
+import game.model.map.Town;
 
 import java.util.ArrayList;
 import java.util.Random;

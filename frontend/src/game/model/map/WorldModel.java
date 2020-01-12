@@ -1,4 +1,4 @@
-package game.model;
+package game.model.map;
 
 import javafx.scene.shape.Shape;
 import java.util.ArrayList;

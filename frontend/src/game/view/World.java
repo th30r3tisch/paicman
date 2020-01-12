@@ -1,7 +1,7 @@
 package game.view;
 import game.controller.WorldController;
 import game.model.Player;
-import game.model.Town;
+import game.model.map.Town;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;

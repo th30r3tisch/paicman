@@ -1,11 +1,13 @@
 package game.model;
 
+import game.model.map.Town;
+
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Player implements Serializable {
-    private static final long serialVersionUID = 5848343439467124184L;
+    private static final long serialVersionUID = 7659567486335018762L;
 
     private String name;
     private Color color;

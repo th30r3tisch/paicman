@@ -1,4 +1,4 @@
-package game.map;
+package game.model.map;
 
 public class Boundry {
 
