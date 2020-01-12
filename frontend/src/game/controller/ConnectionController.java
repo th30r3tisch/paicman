@@ -64,7 +64,7 @@ public class ConnectionController implements Runnable{
                             break;
                         case SERVER:
                             LOGGER.log(Level.INFO,"Server msg");
-                            wc.addNodes(message.getTreeNodes());
+                            wc.addQuadTree(message.getQuadtree());
                             break;
                         case CONNECTED:
                             LOGGER.log(Level.INFO,"Connected msg");

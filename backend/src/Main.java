@@ -107,7 +107,8 @@ public class Main {
             msg.setNote("Initial map received");
             msg.setType(MessageType.SERVER);
             msg.setPlayer(player);
-            msg.setTreeNodes(game.getAreaContent());
+            //msg.setTreeNodes(game.getAreaContent());
+            msg.setQuadtree(game.getInitialMap());
             write(msg);
             return msg;
         }

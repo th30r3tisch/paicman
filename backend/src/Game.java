@@ -1,8 +1,4 @@
-import game.model.map.Boundry;
-import game.model.map.Quadtree;
-import game.model.map.TreeNode;
-import game.model.map.Obstacle;
-import game.model.map.Town;
+import game.model.map.*;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -11,7 +7,7 @@ import java.util.logging.Logger;
 
 
 class Game {
-    private Quadtree map;
+    private WorldModel world;
     private static Logger LOGGER = Logger.getLogger("InfoLogging");
     private int obstacles = 10;
     private int towns = 20;
@@ -21,8 +17,7 @@ class Game {
     private ArrayList<TreeNode> areaContent;
 
     public Game() {
-        this.map = new Quadtree(1, new Boundry(0, 0, gameMapWidth, gameMapHeight));
-
+        this.world = new WorldModel(0, 0, gameMapWidth, gameMapHeight);
         LOGGER.log(Level.INFO,"Creating map");
         genereateInitialMap();
     }
@@ -33,7 +28,7 @@ class Game {
     }
      private void createTowns(){
          for (int i = 0; i < towns; i++){
-             map.insert( new Town(
+             this.world.insert( new Town(
                      randomNumber(distanceToEdge, gameMapWidth - distanceToEdge),
                      randomNumber(distanceToEdge, gameMapHeight - distanceToEdge)
              ));
@@ -42,7 +37,7 @@ class Game {
 
      private void createObstacles(){
          for (int i = 0; i < obstacles; i++){
-             map.insert(new Obstacle(
+             this.world.insert(new Obstacle(
                      randomNumber(distanceToEdge, gameMapWidth - distanceToEdge),
                      randomNumber(distanceToEdge, gameMapHeight - distanceToEdge),
                      randomNumber(0, 1),
@@ -56,7 +51,10 @@ class Game {
      }
 
      public ArrayList<TreeNode> getAreaContent(){
-         this.areaContent = map.getAllContent(map, 0,0,4000,2000);
-         return areaContent;
+         return this.world.getAreaContent(0,0,4000,2000);
+     }
+
+     public Quadtree getInitialMap(){
+        return this.world.getQuadtree();
      }
 }

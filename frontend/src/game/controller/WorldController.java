@@ -1,6 +1,7 @@
 package game.controller;
 
 import game.model.Player;
+import game.model.map.Quadtree;
 import game.model.map.Town;
 import game.model.map.TreeNode;
 import game.model.map.WorldModel;
@@ -61,14 +62,8 @@ public class WorldController {
         }
     }
 
-    public void addNodes(ArrayList<TreeNode> nodes) {
-        for (TreeNode node : nodes) {
-            wm.addNodes(node);
-        }
-    }
-
-    public ArrayList<TreeNode> getTreeNodes() {
-        return wm.getTreeNodes();
+    public void addQuadTree(Quadtree quadtree) {
+        this.wm.setQuadtree(quadtree);
     }
 
     private Town currentSelect;

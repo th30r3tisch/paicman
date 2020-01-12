@@ -1,5 +1,6 @@
 package game.model;
 
+import game.model.map.Quadtree;
 import game.model.map.TreeNode;
 
 import java.io.Serializable;
@@ -11,6 +12,7 @@ public class Message implements Serializable {
     private Player player;
     private String note;
     private ArrayList<TreeNode> treeNodes;
+    private Quadtree quadtree;
 
     public MessageType getType() {
         return type;
@@ -35,4 +37,7 @@ public class Message implements Serializable {
 
     public ArrayList<TreeNode> getTreeNodes() { return treeNodes; }
     public void setTreeNodes(ArrayList<TreeNode> treeNodes) { this.treeNodes = treeNodes; }
+
+    public Quadtree getQuadtree() { return quadtree; }
+    public void setQuadtree(Quadtree quadtree) { this.quadtree = quadtree;}
 }

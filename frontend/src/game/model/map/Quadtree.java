@@ -1,11 +1,12 @@
 package game.model.map;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Quadtree {
+public class Quadtree implements Serializable {
     final int MAX_CAPACITY =4;
     private int level = 0;
     private List<TreeNode> treeNodes;

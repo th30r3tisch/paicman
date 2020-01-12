@@ -1,6 +1,8 @@
 package game.model.map;
 
-public class Boundry {
+import java.io.Serializable;
+
+public class Boundry implements Serializable {
 
     int xMin, yMin, xMax, yMax;
 
