@@ -18,6 +18,7 @@ public class Town extends TreeNode implements Serializable {
     private Player owner;
     private int life;
     private Color color;
+    //changed array type to check for accurate attack ticks later
     private ArrayList<AbstractMap.SimpleEntry<Town, Long>> conqueredByTowns = new ArrayList<>();
 
 
@@ -51,6 +52,7 @@ public class Town extends TreeNode implements Serializable {
         list.add(this);
         ConnectionController.attackRequest(list);
         if(conqueredByTowns == null) conqueredByTowns = new ArrayList<>();
+        //set start time for attack, to check for attack ticks later
         this.conqueredByTowns.add(new AbstractMap.SimpleEntry(town, System.currentTimeMillis()));
     }
 

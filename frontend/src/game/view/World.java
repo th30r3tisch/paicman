@@ -124,8 +124,7 @@ public class World implements ViewInterface {
 
         return  parent;
     }
-
-    //todo maybe add eventhandlers
+    
     public MenuBar getMenu(){
         Menu menu = new Menu("Menu");
         MenuItem menuItem1 = new MenuItem();

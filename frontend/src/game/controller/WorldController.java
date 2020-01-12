@@ -72,6 +72,10 @@ public class WorldController {
 
     private Town currentSelect;
 
+    /**
+     * set up logic vor villages on Map
+     * @return the object on map
+     */
     public ArrayList<Shape> setUpShapes() {
         ArrayList<Shape> shapes = new ArrayList<>();
         for (TreeNode tn : wm.getTreeNodes()) {
@@ -153,6 +157,7 @@ public class WorldController {
             Runnable updater = () -> {
                 if (!group.getChildren().equals(setUpShapes())) {
                     group.getChildren().clear();
+                    //update health of all villages
                     updateHealth(startTime);
                     group.getChildren().addAll(setUpShapes());
                 }
@@ -173,19 +178,31 @@ public class WorldController {
     }
 
 
+    /**
+     * Update health of villages according to attack/recover ticks
+     * @param startTime
+     */
+
     private void updateHealth(long startTime) {
+
+        //find all towns
         for (TreeNode treeNode : wm.getTreeNodes()) {
             if (treeNode instanceof Town) {
                 Town town = (Town) treeNode;
                 ArrayList<AbstractMap.SimpleEntry<Town, Long>> conquerers = town.getConqueredByTownEntries();
                 ArrayList<Town> toRemove = new ArrayList<>();
+
+                //check if town is under attack
                 if(conquerers != null && conquerers.size() > 0) {
                     for (AbstractMap.SimpleEntry<Town, Long> conquerer : conquerers) {
+
+                        //every passing two seconds town loses health
                         if ((System.currentTimeMillis() - conquerer.getValue().longValue()) % 3000 >= 2000) {
                             //update attack damage
                             town.setLife(town.getLife() - 1);
                             conquerer.getKey().setLife(conquerer.getKey().getLife() - 1);
                             //if health of attacker reaches 0 stop attack
+                            //if conqueror has 0 or less hp, attack will be abortet
                             if (conquerer.getKey().getLife() <= 0) {
                                 toRemove.add(conquerer.getKey());
                             }
@@ -196,11 +213,13 @@ public class WorldController {
                             }
                         }
                     }
+                    //if town was defeatet remove all attacker
                     if(town.getLife() <= 0){
                         town.getConqueredByTowns().forEach(attacker -> {
                             town.removeConqueredByTown(attacker);
                         });
                     } else {
+                        //remove all attacker, that can not attack anymore
                         for (Town remove : toRemove) {
                             town.removeConqueredByTown(remove);
                         }
