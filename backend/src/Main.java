@@ -86,6 +86,12 @@ public class Main {
                                 sendInitialMap();
                                 LOGGER.log(Level.INFO, "Map sent to " + name);
                                 break;
+                            case ATTACK:
+                                LOGGER.log(Level.INFO, "Attack request from " + name);
+                                break;
+                            case REMOVE_ATTACK:
+                                LOGGER.log(Level.INFO, "Cancel attack from " + name);
+                                break;
                         }
                     }
                 }

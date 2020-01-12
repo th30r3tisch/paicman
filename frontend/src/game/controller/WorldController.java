@@ -5,13 +5,11 @@ import game.model.Town;
 import game.model.TreeNode;
 import game.model.WorldModel;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import game.view.World;
 import javafx.scene.layout.StackPane;
@@ -92,58 +90,52 @@ public class WorldController {
                 }
                 //if (t.getOwner() == player) {
                 final Delta dragDelta = new Delta();
-                shape.setOnMousePressed(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent mouseEvent) {
-                        // record a delta distance for the drag and drop operation.
-                        dragDelta.x = shape.getLayoutX() - mouseEvent.getSceneX();
-                        dragDelta.y = shape.getLayoutY() - mouseEvent.getSceneY();
-                        shape.setCursor(Cursor.MOVE);
-                        world.updateTownDisplay(town);
-                        System.out.println("click event");
-                        if (currentSelect == null) {
-                            currentSelect = town;
-                            shape.setStrokeWidth(3);
-                            shape.setStroke(Color.RED);
-                        } else if (currentSelect != town) {
-                            town.addConqueredByTown(currentSelect);
-                            //TODO add check if legal move
-                            currentSelect = null;
-                        } else currentSelect = null;
-                    }
+                shape.setOnMousePressed(mouseEvent -> {
+                    // record a delta distance for the drag and drop operation.
+                    dragDelta.x = shape.getLayoutX() - mouseEvent.getSceneX();
+                    dragDelta.y = shape.getLayoutY() - mouseEvent.getSceneY();
+                    shape.setCursor(Cursor.MOVE);
+                    world.updateTownDisplay(town);
+                    System.out.println("click event");
+                    if (currentSelect == null) {
+                        currentSelect = town;
+                        shape.setStrokeWidth(3);
+                        shape.setStroke(Color.RED);
+                    } else if (currentSelect != town) {
+                        town.addConqueredByTown(currentSelect);
+                        //TODO add check if legal move
+                        currentSelect = null;
+                    } else currentSelect = null;
                 });
 
                 if (town.getConqueredByTowns() != null) {
                     for (Town attacker : town.getConqueredByTowns()) {
                         Line line = new Line(attacker.getX(), attacker.getY(), town.getX(), town.getY());
 
-                        line.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                            @Override
-                            public void handle(MouseEvent mouseEvent) {
-                                MouseButton button = mouseEvent.getButton();
-                                switch (button) {
-                                    case SECONDARY:
-                                        System.out.println("right click");
-                                        ArrayList<TreeNode> treeNodes = wm.getTreeNodes();
-                                        Town attacker = null;
-                                        Town attacked = null;
-                                        int counter = 0;
-                                        while (attacker == null || attacked == null) {
-                                            if (treeNodes.get(counter) instanceof Town) {
-                                                Town currentTown = (Town) treeNodes.get(counter);
-                                                System.out.println("line y " + currentTown.getY());
-                                                if (currentTown.getX() == line.getStartX() && currentTown.getY() == line.getStartY())
-                                                    attacker = currentTown;
-                                                else if (currentTown.getX() == line.getEndX() && currentTown.getY() == line.getEndY())
-                                                    attacked = currentTown;
-                                            }
-                                            counter++;
+                        line.setOnMouseClicked(mouseEvent -> {
+                            MouseButton button = mouseEvent.getButton();
+                            switch (button) {
+                                case SECONDARY:
+                                    System.out.println("right click");
+                                    ArrayList<TreeNode> treeNodes = wm.getTreeNodes();
+                                    Town attacker1 = null;
+                                    Town attacked = null;
+                                    int counter = 0;
+                                    while (attacker1 == null || attacked == null) {
+                                        if (treeNodes.get(counter) instanceof Town) {
+                                            Town currentTown = (Town) treeNodes.get(counter);
+                                            System.out.println("line y " + currentTown.getY());
+                                            if (currentTown.getX() == line.getStartX() && currentTown.getY() == line.getStartY())
+                                                attacker1 = currentTown;
+                                            else if (currentTown.getX() == line.getEndX() && currentTown.getY() == line.getEndY())
+                                                attacked = currentTown;
                                         }
-                                        attacked.removeConqueredByTown(attacker);
-                                        break;
-                                    default:
-                                        System.out.println("something click");
-                                }
+                                        counter++;
+                                    }
+                                    attacked.removeConqueredByTown(attacker1);
+                                    break;
+                                default:
+                                    System.out.println("something click");
                             }
                         });
                         line.setStrokeWidth(8);

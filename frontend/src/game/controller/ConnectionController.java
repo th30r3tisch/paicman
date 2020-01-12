@@ -79,6 +79,7 @@ public class ConnectionController implements Runnable{
                     }
                 }
             }
+            socket.close();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -121,7 +122,7 @@ public class ConnectionController implements Runnable{
     public static void removeAttackRequest(ArrayList nodes) {
         Message mapRequest = new Message();
         mapRequest.setPlayer(player);
-        mapRequest.setType(REMOVEATTACK);
+        mapRequest.setType(REMOVE_ATTACK);
         mapRequest.setTreeNodes(nodes);
         try {
             oos.writeObject(mapRequest);
