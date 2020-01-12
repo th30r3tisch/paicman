@@ -7,7 +7,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Town extends TreeNode implements Serializable {
     private static final long serialVersionUID = -6888113389669325015L;
@@ -15,16 +18,40 @@ public class Town extends TreeNode implements Serializable {
     private Player owner;
     private int life;
     private Color color;
-    private ArrayList<Town> conqueredByTowns = new ArrayList<>();;
+    private ArrayList<AbstractMap.SimpleEntry<Town, Long>> conqueredByTowns = new ArrayList<>();
 
-    public ArrayList<Town> getConqueredByTowns() { return conqueredByTowns; }
+
+    public ArrayList<AbstractMap.SimpleEntry<Town, Long>> getConqueredByTownEntries(){
+        return conqueredByTowns;
+    }
+
+    public ArrayList<Town> getConqueredByTowns() {
+        ArrayList<Town> towns = new ArrayList<>();
+        if(conqueredByTowns != null && conqueredByTowns.size() > 0) {
+            for (AbstractMap.SimpleEntry<Town, Long> entry : conqueredByTowns) {
+                Town town = entry.getKey();
+                towns.add(town);
+            }
+        }
+        return towns;
+    }
+
+    public ArrayList<Long> getAttackTimes(){
+        ArrayList<Long> time = new ArrayList<>();
+        for (AbstractMap.SimpleEntry<Town, Long> entry : conqueredByTowns ) {
+            long town = entry.getValue();
+            time.add(town);
+        }
+        return time;
+    }
+
     public void addConqueredByTown(Town town){
         ArrayList<TreeNode> list = new ArrayList();
         list.add(town);
         list.add(this);
         ConnectionController.attackRequest(list);
         if(conqueredByTowns == null) conqueredByTowns = new ArrayList<>();
-        this.conqueredByTowns.add(town);
+        this.conqueredByTowns.add(new AbstractMap.SimpleEntry(town, System.currentTimeMillis()));
     }
 
     public void removeConqueredByTown(Town town) {
@@ -33,7 +60,8 @@ public class Town extends TreeNode implements Serializable {
         list.add(this);
         ConnectionController.removeAttackRequest(list);
         System.out.println("town in list? " + this.getConqueredByTowns().contains(town));
-        this.conqueredByTowns.remove(town);
+        this.conqueredByTowns.removeIf(entry -> (entry.getKey() == town));
+        this.conqueredByTowns.trimToSize();
     }
 
     public Town(Player conqueror, int x, int y) {

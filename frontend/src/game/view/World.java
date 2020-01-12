@@ -109,7 +109,6 @@ public class World implements ViewInterface {
         ownerText = new Text();
 
         VBox detailBox = new VBox();
-
         //not working yet
         detailBox.setStyle("-fx-background-color: #FFFAAAA;");
         detailBox.setBackground(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY, Insets.EMPTY)));
@@ -142,7 +141,6 @@ public class World implements ViewInterface {
     }
 
     public void updateTownDisplay(Town town){
-        System.out.println("update town " + town.getLife());
         String text = "Not conquered";
         if(town.getOwner() != null){
             text = town.getOwner().getName();

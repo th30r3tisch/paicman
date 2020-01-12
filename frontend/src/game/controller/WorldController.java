@@ -5,6 +5,7 @@ import game.model.map.Quadtree;
 import game.model.map.Town;
 import game.model.map.TreeNode;
 import game.model.map.WorldModel;
+import game.view.Login;
 import javafx.application.Platform;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -19,7 +20,10 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 
 
+import java.awt.*;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -82,13 +86,11 @@ public class WorldController {
                 if (currentSelect == town) {
                     shape.setStrokeWidth(5);
                     shape.setStroke(Color.RED);
+                    world.updateTownDisplay(town);
                 }
+
                 //if (t.getOwner() == player) {
-                final Delta dragDelta = new Delta();
                 shape.setOnMousePressed(mouseEvent -> {
-                    // record a delta distance for the drag and drop operation.
-                    dragDelta.x = shape.getLayoutX() - mouseEvent.getSceneX();
-                    dragDelta.y = shape.getLayoutY() - mouseEvent.getSceneY();
                     shape.setCursor(Cursor.MOVE);
                     world.updateTownDisplay(town);
                     System.out.println("click event");
@@ -103,10 +105,9 @@ public class WorldController {
                     } else currentSelect = null;
                 });
 
-                if (town.getConqueredByTowns() != null) {
+                if (town.getConqueredByTowns().size() > 0) {
                     for (Town attacker : town.getConqueredByTowns()) {
                         Line line = new Line(attacker.getX(), attacker.getY(), town.getX(), town.getY());
-
                         line.setOnMouseClicked(mouseEvent -> {
                             MouseButton button = mouseEvent.getButton();
                             switch (button) {
@@ -147,11 +148,12 @@ public class WorldController {
     }
 
     public void startUpdater() {
-
+        long startTime = System.currentTimeMillis();
         Thread thread = new Thread(() -> {
             Runnable updater = () -> {
                 if (!group.getChildren().equals(setUpShapes())) {
                     group.getChildren().clear();
+                    updateHealth(startTime);
                     group.getChildren().addAll(setUpShapes());
                 }
             };
@@ -160,6 +162,7 @@ public class WorldController {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
+
                 }
                 // UI update is run on the Application thread
                 Platform.runLater(updater);
@@ -169,27 +172,44 @@ public class WorldController {
         thread.start();
     }
 
-    public void checkShapeIntersection(Shape block) {
-        boolean collisionDetected = false;
-        //System.out.println("moving");
-        ArrayList<Shape> shapes = wm.getShapes();
-        for (Shape static_bloc : shapes) {
-            if (static_bloc != block) {
-                System.out.println("check block " + static_bloc.getTranslateX());
-                static_bloc.setFill(static_bloc.getFill());
 
-                Shape intersect = Shape.intersect(block, static_bloc);
-                if (intersect.getBoundsInLocal().getWidth() != -1) {
-                    collisionDetected = true;
-                    System.out.println("intersection");
+    private void updateHealth(long startTime) {
+        for (TreeNode treeNode : wm.getTreeNodes()) {
+            if (treeNode instanceof Town) {
+                Town town = (Town) treeNode;
+                ArrayList<AbstractMap.SimpleEntry<Town, Long>> conquerers = town.getConqueredByTownEntries();
+                ArrayList<Town> toRemove = new ArrayList<>();
+                if(conquerers != null && conquerers.size() > 0) {
+                    for (AbstractMap.SimpleEntry<Town, Long> conquerer : conquerers) {
+                        if ((System.currentTimeMillis() - conquerer.getValue().longValue()) % 3000 >= 2000) {
+                            //update attack damage
+                            town.setLife(town.getLife() - 1);
+                            conquerer.getKey().setLife(conquerer.getKey().getLife() - 1);
+                            //if health of attacker reaches 0 stop attack
+                            if (conquerer.getKey().getLife() <= 0) {
+                                toRemove.add(conquerer.getKey());
+                            }
+
+                            //TODO if town has 0 hp abort all attack and flag and set owner
+                            if(town.getLife() <= 0){
+                                break;
+                            }
+                        }
+                    }
+                    if(town.getLife() <= 0){
+                        town.getConqueredByTowns().forEach(attacker -> {
+                            town.removeConqueredByTown(attacker);
+                        });
+                    } else {
+                        for (Town remove : toRemove) {
+                            town.removeConqueredByTown(remove);
+                        }
+                    }
+                }
+                if ((System.currentTimeMillis() - startTime)  % 5000 >= 4000) {
+                    town.setLife(town.getLife() + 1);
                 }
             }
-        }
-
-        if (collisionDetected) {
-            block.setFill(Color.BLUE);
-        } else {
-            int i = shapes.indexOf(block);
         }
     }
 
@@ -197,10 +217,4 @@ public class WorldController {
     public Scene getScene() {
         return world.getScene();
     }
-
-
-    class Delta {
-        double x, y;
-    }
-
 }
