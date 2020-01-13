@@ -101,7 +101,7 @@ public class WorldController {
                         shape.setStroke(Color.RED);
                     } else if (currentSelect != town) {
                         //previous town was selected that belongs to player attack if not reselect to new town
-                        if(currentSelect.getOwner().getName().equals(player.getName()) && !currentSelect.getConqueredByTowns().contains(currentSelect)) {
+                        if(currentSelect.getOwner().getName().equals(player.getName()) && !town.getConqueredByTowns().contains(currentSelect)) {
                             town.addConqueredByTown(currentSelect);
                             currentSelect = null;
                         } else {
