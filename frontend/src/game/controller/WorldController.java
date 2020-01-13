@@ -101,7 +101,7 @@ public class WorldController {
                         shape.setStroke(Color.RED);
                     } else if (currentSelect != town) {
                         //previous town was selected that belongs to player attack if not reselect to new town
-                        if(currentSelect.getOwner() == player) {
+                        if(currentSelect.getOwner().getName().equals(player.getName()) && !currentSelect.getConqueredByTowns().contains(currentSelect)) {
                             town.addConqueredByTown(currentSelect);
                             currentSelect = null;
                         } else {
@@ -117,7 +117,7 @@ public class WorldController {
                             MouseButton button = mouseEvent.getButton();
                             switch (button) {
                                 case SECONDARY:
-                                    System.out.println("right click");
+
                                     ArrayList<TreeNode> treeNodes = wm.getTreeNodes();
                                     Town attacker1 = null;
                                     Town attacked = null;
@@ -125,20 +125,16 @@ public class WorldController {
                                     while (attacker1 == null || attacked == null) {
                                         if (treeNodes.get(counter) instanceof Town) {
                                             Town currentTown = (Town) treeNodes.get(counter);
-                                            System.out.println("line y " + currentTown.getY());
                                             if (currentTown.getX() == line.getStartX() && currentTown.getY() == line.getStartY()){
                                                 attacker1 = currentTown;
-                                                if(attacker.getOwner() == player) break;
-                                                 else continue;
                                             }
                                             else if (currentTown.getX() == line.getEndX() && currentTown.getY() == line.getEndY())
                                                 attacked = currentTown;
-                                                continue;
                                         }
                                         counter++;
                                     }
                                     //check if you are eligible to abort attack
-                                    if(attacker.getOwner() == player)
+                                    if(attacker.getOwner().getName().equals(player.getName()))
                                         attacked.removeConqueredByTown(attacker1);
                                     break;
                                 default:
@@ -147,6 +143,7 @@ public class WorldController {
                         });
                         //todo add owner color to to line later maybe
                         line.setStrokeWidth(8);
+                        line.setStroke(player.getFXColor());
                         shapes.add(line);
                     }
                 }
@@ -195,6 +192,8 @@ public class WorldController {
 
         //find all towns
         Player player = ConnectionController.getPlayer();
+        //System.out.println("player name:" + player.getName());
+        //.out.println("player color:" + player.getFXColor());
         for (TreeNode treeNode : wm.getTreeNodes()) {
             if (treeNode instanceof Town) {
                 Town town = (Town) treeNode;
@@ -211,7 +210,7 @@ public class WorldController {
                             //update attack damage
                             //if its an enemy decrease health
                             //if players own town increase town health
-                            if(conquerorTown.getOwner() != player) {
+                            if(town.getOwner() == null || !conquerorTown.getOwner().getName().equals(town.getOwner().getName()) ) {
                                 town.setLife(town.getLife() - 1);
                             } else {
                                 town.setLife(town.getLife() + 1);
@@ -239,7 +238,7 @@ public class WorldController {
                         }
                     }
                 }
-                if ((System.currentTimeMillis() - startTime)  % 5000 >= 4000) {
+                if (town.getOwner() != null && (System.currentTimeMillis() - startTime)  % 5000 >= 4000) {
                     town.setLife(town.getLife() + 1);
                 }
             }

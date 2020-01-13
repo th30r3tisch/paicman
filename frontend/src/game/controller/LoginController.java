@@ -19,10 +19,13 @@ public class LoginController {
 
     /** Submit name and load game world */
     public void submitName(ActionEvent e, CharSequence nickname, CharSequence serverIP) {
+        if(!nickname.toString().isEmpty()) {
         player = new Player();
         player.setName(nickname.toString());
         cc = new ConnectionController(player, serverIP.toString(), wc, stage);
-        Thread t = new Thread(cc);
-        t.start();
+
+            Thread t = new Thread(cc);
+            t.start();
+        }
     }
 }

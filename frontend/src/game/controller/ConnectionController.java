@@ -60,6 +60,7 @@ public class ConnectionController implements Runnable{
                     switch (message.getType()) {
                         case PLAYER:
                             LOGGER.log(Level.INFO,"Player msg");
+                            player = message.getPlayer();
                             break;
                         case NOTIFICATION:
                             LOGGER.log(Level.INFO,"Notification msg");
@@ -127,6 +128,7 @@ public class ConnectionController implements Runnable{
     }
 
     public static void removeAttackRequest(ArrayList nodes) {
+        System.out.println("in remove attack method");
         Message mapRequest = new Message();
         mapRequest.setPlayer(player);
         mapRequest.setType(REMOVE_ATTACK);

@@ -63,6 +63,7 @@ public class Town extends TreeNode implements Serializable {
         ArrayList<TreeNode> list = new ArrayList();
         list.add(town);
         list.add(this);
+        System.out.println("in town remove method");
         ConnectionController.removeAttackRequest(list);
         System.out.println("town in list? " + this.getConqueredByTowns().contains(town));
         this.conqueredByTowns.removeIf(entry -> (entry.getKey() == town));
@@ -108,7 +109,10 @@ public class Town extends TreeNode implements Serializable {
             radius = 50;
         }
         Circle c = new Circle(this.x,this.y, radius);
-        c.setFill(javafx.scene.paint.Color.GRAY);
+        if(owner == null)
+            c.setFill(javafx.scene.paint.Color.GRAY);
+        else
+            c.setFill(owner.getFXColor());
         return c;
     }
 }
