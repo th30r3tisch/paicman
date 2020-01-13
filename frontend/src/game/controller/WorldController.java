@@ -93,7 +93,6 @@ public class WorldController {
                     world.updateTownDisplay(town);
                 }
 
-                //if (t.getOwner() == player) {
                 shape.setOnMousePressed(mouseEvent -> {
                     shape.setCursor(Cursor.MOVE);
                     world.updateTownDisplay(town);
@@ -103,9 +102,13 @@ public class WorldController {
                         shape.setStrokeWidth(3);
                         shape.setStroke(Color.RED);
                     } else if (currentSelect != town) {
-                        town.addConqueredByTown(currentSelect);
-                        //TODO add check if legal move
-                        currentSelect = null;
+                        //previous town was selected that belongs to player attack if not reselect to new town
+                        if(currentSelect.getOwner() == player) {
+                            town.addConqueredByTown(currentSelect);
+                            currentSelect = null;
+                        } else {
+                            currentSelect = town;
+                        }
                     } else currentSelect = null;
                 });
 
@@ -125,19 +128,26 @@ public class WorldController {
                                         if (treeNodes.get(counter) instanceof Town) {
                                             Town currentTown = (Town) treeNodes.get(counter);
                                             System.out.println("line y " + currentTown.getY());
-                                            if (currentTown.getX() == line.getStartX() && currentTown.getY() == line.getStartY())
+                                            if (currentTown.getX() == line.getStartX() && currentTown.getY() == line.getStartY()){
                                                 attacker1 = currentTown;
+                                                if(attacker.getOwner() == player) break;
+                                                 else continue;
+                                            }
                                             else if (currentTown.getX() == line.getEndX() && currentTown.getY() == line.getEndY())
                                                 attacked = currentTown;
+                                                continue;
                                         }
                                         counter++;
                                     }
-                                    attacked.removeConqueredByTown(attacker1);
+                                    //check if you are eligible to abort attack
+                                    if(attacker.getOwner() == player)
+                                        attacked.removeConqueredByTown(attacker1);
                                     break;
                                 default:
                                     System.out.println("something click");
                             }
                         });
+                        //todo add owner color to to line later maybe
                         line.setStrokeWidth(8);
                         shapes.add(line);
                     }
@@ -186,40 +196,46 @@ public class WorldController {
     private void updateHealth(long startTime) {
 
         //find all towns
+        Player player = ConnectionController.getPlayer();
         for (TreeNode treeNode : wm.getTreeNodes()) {
             if (treeNode instanceof Town) {
                 Town town = (Town) treeNode;
-                ArrayList<AbstractMap.SimpleEntry<Town, Long>> conquerers = town.getConqueredByTownEntries();
+                ArrayList<AbstractMap.SimpleEntry<Town, Long>> conquerors = town.getConqueredByTownEntries();
                 ArrayList<Town> toRemove = new ArrayList<>();
 
                 //check if town is under attack
-                if(conquerers != null && conquerers.size() > 0) {
-                    for (AbstractMap.SimpleEntry<Town, Long> conquerer : conquerers) {
+                if(conquerors != null && conquerors.size() > 0) {
+                    for (AbstractMap.SimpleEntry<Town, Long> conqueror : conquerors) {
 
                         //every passing two seconds town loses health
-                        if ((System.currentTimeMillis() - conquerer.getValue().longValue()) % 3000 >= 2000) {
+                        Town conquerorTown = conqueror.getKey();
+                        if ((System.currentTimeMillis() - conqueror.getValue().longValue()) % 3000 >= 2000) {
                             //update attack damage
-                            town.setLife(town.getLife() - 1);
-                            conquerer.getKey().setLife(conquerer.getKey().getLife() - 1);
+                            //if its an enemy decrease health
+                            //if players own town increase town health
+                            if(conquerorTown.getOwner() != player) {
+                                town.setLife(town.getLife() - 1);
+                            } else {
+                                town.setLife(town.getLife() + 1);
+                            }
+                            conquerorTown.setLife(conqueror.getKey().getLife() - 1);
                             //if health of attacker reaches 0 stop attack
-                            //if conqueror has 0 or less hp, attack will be abortet
-                            if (conquerer.getKey().getLife() <= 0) {
-                                toRemove.add(conquerer.getKey());
+                            //if conqueror has 0 or less hp, attack will be aborted
+                            if (conquerorTown.getLife() <= 0) {
+                                toRemove.add(conqueror.getKey());
                             }
 
-                            //TODO if town has 0 hp abort all attack and flag and set owner
+                            //town is conquered abort all attacks and change owner
                             if(town.getLife() <= 0){
+                                town.removeAllConquerors();
+                                town.changeOwnership(conquerorTown.getOwner());
+                                toRemove.clear();
                                 break;
                             }
                         }
                     }
-                    //if town was defeatet remove all attacker
-                    if(town.getLife() <= 0){
-                        town.getConqueredByTowns().forEach(attacker -> {
-                            town.removeConqueredByTown(attacker);
-                        });
-                    } else {
-                        //remove all attacker, that can not attack anymore
+                    //remove all attacker, that can not attack anymore
+                    if(toRemove.size() > 0){
                         for (Town remove : toRemove) {
                             town.removeConqueredByTown(remove);
                         }

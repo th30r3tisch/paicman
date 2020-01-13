@@ -2,6 +2,8 @@ package game.controller;
 
 import game.model.Message;
 import game.model.Player;
+import game.model.map.Town;
+import game.model.map.TreeNode;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
@@ -121,6 +123,21 @@ public class ConnectionController implements Runnable{
         mapRequest.setPlayer(player);
         mapRequest.setType(REMOVE_ATTACK);
         mapRequest.setTreeNodes(nodes);
+        try {
+            oos.writeObject(mapRequest);
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void changeTownOwnerRequest(Player player, Town town){
+        Message mapRequest = new Message();
+        mapRequest.setPlayer(player);
+        mapRequest.setType(CHANGE_OWNER);
+        ArrayList<TreeNode> townList = new ArrayList<>();
+        townList.add(town);
+        mapRequest.setTreeNodes(townList);
         try {
             oos.writeObject(mapRequest);
             oos.flush();

@@ -46,6 +46,11 @@ public class Town extends TreeNode implements Serializable {
         return time;
     }
 
+    public void changeOwnership(Player player){
+        ConnectionController.changeTownOwnerRequest(player, this);
+        owner = player;
+    }
+
     public void addConqueredByTown(Town town){
         ArrayList<TreeNode> list = new ArrayList();
         list.add(town);
@@ -64,6 +69,16 @@ public class Town extends TreeNode implements Serializable {
         System.out.println("town in list? " + this.getConqueredByTowns().contains(town));
         this.conqueredByTowns.removeIf(entry -> (entry.getKey() == town));
         this.conqueredByTowns.trimToSize();
+    }
+
+    public void removeAllConquerors(){
+        for (AbstractMap.SimpleEntry<Town,Long> conqueror : conqueredByTowns) {
+            ArrayList<TreeNode> list = new ArrayList();
+            list.add(conqueror.getKey());
+            list.add(this);
+            ConnectionController.removeAttackRequest(list);
+        }
+        conqueredByTowns = new ArrayList<>();
     }
 
     public Town(Player conqueror, int x, int y) {
