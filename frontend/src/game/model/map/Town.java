@@ -2,15 +2,13 @@ package game.model.map;
 
 import game.controller.ConnectionController;
 import game.model.Player;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
+import java.awt.*;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class Town extends TreeNode implements Serializable {
     private static final long serialVersionUID = -6888113389669325015L;
@@ -69,7 +67,7 @@ public class Town extends TreeNode implements Serializable {
     public Town(Player conqueror, int x, int y) {
         this.life = 20;
         this.owner = conqueror;
-        this.color = conqueror.getFXColor();
+        this.color = conqueror.getAWTColor();
         this.x = x;
         this.y = y;
     }
@@ -78,7 +76,7 @@ public class Town extends TreeNode implements Serializable {
 
     public void setOwner(Player conqueror) {
         this.owner = conqueror;
-        this.color = conqueror.getFXColor();
+        this.color = conqueror.getAWTColor();
     }
 
     public int getLife() { return life; }
@@ -95,7 +93,7 @@ public class Town extends TreeNode implements Serializable {
             radius = 50;
         }
         Circle c = new Circle(this.x,this.y, radius);
-        c.setFill(Color.GRAY);
+        c.setFill(javafx.scene.paint.Color.GRAY);
         return c;
     }
 }

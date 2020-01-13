@@ -14,6 +14,7 @@ class Game {
     private int gameMapHeight = 2000; // has to match with the gameMapHeight in frontend
     private int gameMapWidth = 4000; // has to match with the gameMapWidth in frontend
     private int distanceToEdge = 100;
+    private int townMinDist = 100;
     private ArrayList<TreeNode> areaContent;
 
     public Game() {
@@ -26,13 +27,24 @@ class Game {
         createObstacles();
         createTowns();
     }
+
      private void createTowns(){
          for (int i = 0; i < towns; i++){
-             this.world.insert( new Town(
-                     randomNumber(distanceToEdge, gameMapWidth - distanceToEdge),
-                     randomNumber(distanceToEdge, gameMapHeight - distanceToEdge)
-             ));
+             createTown();
          }
+     }
+
+     public Town createTown(){
+         Town t = null;
+         while(t == null){
+             int x = randomNumber(distanceToEdge, gameMapWidth - distanceToEdge);
+             int y = randomNumber(distanceToEdge, gameMapHeight - distanceToEdge);
+             if (this.getAreaContent((x - townMinDist), (y - townMinDist), (x + townMinDist), (y + townMinDist)).size() == 0) {
+                 t = new Town(x, y);
+             }
+         }
+         this.world.insert(t);
+         return t;
      }
 
      private void createObstacles(){
@@ -50,8 +62,8 @@ class Game {
          return r.nextInt(max - min + 1) + min;
      }
 
-     public ArrayList<TreeNode> getAreaContent(){
-         return this.world.getAreaContent(0,0,4000,2000);
+     public ArrayList<TreeNode> getAreaContent(int startX, int startY, int endX, int endY){
+         return this.world.getAreaContent(startX, startY, endX, endY);
      }
 
      public Quadtree getInitialMap(){

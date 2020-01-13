@@ -5,7 +5,7 @@ import game.model.map.Quadtree;
 import game.model.map.Town;
 import game.model.map.TreeNode;
 import game.model.map.WorldModel;
-import game.view.Login;
+
 import javafx.application.Platform;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -19,10 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 
-
-import java.awt.*;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.logging.Level;

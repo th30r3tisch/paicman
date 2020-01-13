@@ -11,7 +11,7 @@ public class Player implements Serializable {
 
     private String name;
     private Color color;
-    private ArrayList<Town> ownedTowns;
+    private ArrayList<Town> ownedTowns = new ArrayList<>();
 
     public ArrayList<Town> getOwnedTowns() { return ownedTowns; }
     public void setOwnedTown(Town town) { this.ownedTowns.add(town); }
