@@ -65,6 +65,7 @@ public class WorldController {
 
     public void addQuadTree(Quadtree quadtree) {
         this.wm.setQuadtree(quadtree);
+        Player player = ConnectionController.getPlayer();
     }
 
     private Town currentSelect;

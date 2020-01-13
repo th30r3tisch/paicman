@@ -82,7 +82,7 @@ public class Town extends TreeNode implements Serializable {
     public Town(Player conqueror, int x, int y) {
         this.life = 20;
         this.owner = conqueror;
-        this.color = conqueror.getAWTColor();
+        this.color = conqueror.getColor();
         this.x = x;
         this.y = y;
     }
@@ -91,7 +91,7 @@ public class Town extends TreeNode implements Serializable {
 
     public void setOwner(Player conqueror) {
         this.owner = conqueror;
-        this.color = conqueror.getAWTColor();
+        this.color = conqueror.getColor();
     }
 
     public int getLife() { return life; }

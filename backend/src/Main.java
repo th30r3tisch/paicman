@@ -106,7 +106,7 @@ public class Main {
         private Message sendInitialMap() throws IOException{
             Message msg = new Message();
             msg.setNote("Initial map received");
-            msg.setType(MessageType.SERVER);
+            msg.setType(MessageType.INIT);
             msg.setPlayer(player);
             //msg.setTreeNodes(game.getAreaContent());
             msg.setQuadtree(game.getInitialMap());

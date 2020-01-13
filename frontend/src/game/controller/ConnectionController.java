@@ -64,8 +64,9 @@ public class ConnectionController implements Runnable{
                         case NOTIFICATION:
                             LOGGER.log(Level.INFO,"Notification msg");
                             break;
-                        case SERVER:
+                        case INIT:
                             LOGGER.log(Level.INFO,"Server msg");
+                            updatePlayer(message.getPlayer());
                             wc.addQuadTree(message.getQuadtree());
                             break;
                         case CONNECTED:
@@ -94,6 +95,13 @@ public class ConnectionController implements Runnable{
 
     public static Player getPlayer() {
         return player;
+    }
+
+    private void updatePlayer(Player player){
+        ConnectionController.player.setColor(player.getColor());
+        for (Town t: player.getOwnedTowns()) {
+            ConnectionController.player.setOwnedTown(t);
+        }
     }
 
     public static void mapRequest() throws IOException{

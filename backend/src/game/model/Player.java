@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Player implements Serializable {
-    private static final long serialVersionUID = 7659567486335018762L;
+    private static final long serialVersionUID = -689634656088266993L;
 
     private String name;
     private Color color;
