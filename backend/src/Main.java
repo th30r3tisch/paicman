@@ -1,6 +1,7 @@
 import game.model.Message;
 import game.model.MessageType;
 import game.model.Player;
+import game.model.map.Town;
 
 import java.awt.*;
 import java.io.*;
@@ -202,7 +203,10 @@ public class Main {
             if (!names.containsKey(name)) {
                 player = new Player();
                 player.setName(name);
-                player.setColor(Color.BLUE);
+                player.setColor(new Color((int)(Math.random() * 0x1000000)));
+                Town t = game.createTown();
+                t.setOwner(player);
+                player.setOwnedTown(t);
                 players.add(player);
                 names.put(name, player);
 
