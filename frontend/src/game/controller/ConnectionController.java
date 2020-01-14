@@ -56,7 +56,7 @@ public class ConnectionController implements Runnable{
                 Message message = (Message) ois.readObject();
 
                 if (message != null) {
-                    LOGGER.log(Level.INFO, " Message received: " + message.getNote() + " MessageType: " + message.getType() + " Name: " + message.getPlayer());
+                    LOGGER.log(Level.INFO, " Message received: " + message.getNote() + " MessageType: " + message.getType() + " Name: " + message.getPlayer().getName());
                     switch (message.getType()) {
                         case PLAYER:
                             LOGGER.log(Level.INFO,"Player msg");
@@ -77,6 +77,14 @@ public class ConnectionController implements Runnable{
                         case DISCONNECTED:
                             LOGGER.log(Level.INFO,"Disconnected msg");
                             break;
+                        case ATTACK:
+                            updateQuadtree(message.getTreeNodes());
+                            LOGGER.log(Level.INFO,message.getPlayer().getName() + " attacks a village");
+                            break;
+                        case REMOVE_ATTACK:
+                            updateQuadtree(message.getTreeNodes());
+                            LOGGER.log(Level.INFO,message.getPlayer().getName() + " stopped attacking a village");
+                            break;
                     }
                 }
             }
@@ -84,6 +92,10 @@ public class ConnectionController implements Runnable{
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private void updateQuadtree(ArrayList<TreeNode> nodes){
+            wc.updateQuadtree(nodes);
     }
 
     public void login() throws IOException {
@@ -111,7 +123,6 @@ public class ConnectionController implements Runnable{
         mapRequest.setType(SERVER);
         mapRequest.setNote(player.getName() + " needs the map.");
         oos.writeObject(mapRequest);
-        oos.flush();
     }
 
     public static void attackRequest(ArrayList nodes){
@@ -121,7 +132,6 @@ public class ConnectionController implements Runnable{
         mapRequest.setTreeNodes(nodes);
         try {
             oos.writeObject(mapRequest);
-            oos.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -135,7 +145,6 @@ public class ConnectionController implements Runnable{
         mapRequest.setTreeNodes(nodes);
         try {
             oos.writeObject(mapRequest);
-            oos.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -150,7 +159,6 @@ public class ConnectionController implements Runnable{
         mapRequest.setTreeNodes(townList);
         try {
             oos.writeObject(mapRequest);
-            oos.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
