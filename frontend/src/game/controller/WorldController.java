@@ -86,11 +86,13 @@ public class WorldController {
                 Player player = ConnectionController.getPlayer();
 
                 if (currentSelect == town) {
-                    shape.setStrokeWidth(5);
+                    shape.setStrokeWidth(3);
                     shape.setStroke(Color.RED);
-                    world.updateTownDisplay(town);
+                    world.updateTownDisplay(currentSelect);
+                } else if(currentSelect == null){
+                    world.updateTownDisplay(currentSelect);
                 }
-
+                world.updatePlayerStat(player);
                 shape.setOnMousePressed(mouseEvent -> {
                     shape.setCursor(Cursor.MOVE);
                     world.updateTownDisplay(town);
@@ -164,6 +166,7 @@ public class WorldController {
                     group.getChildren().clear();
                     //update health of all villages
                     updateHealth(startTime);
+
                     group.getChildren().addAll(setUpShapes());
                 }
             };
@@ -225,7 +228,15 @@ public class WorldController {
                             //town is conquered abort all attacks and change owner
                             if(town.getLife() <= 0){
                                 town.removeAllConquerors();
+                                if(town.getOwner() != null)
+                                town.getOwner().removeOwnedTown(town);
                                 town.changeOwnership(conquerorTown.getOwner());
+                                //TODO remove later since it is not persistent at this time
+                                if(player.getName().equals(town.getOwner().getName())){
+                                    player.setOwnedTown(town);
+                                }
+                                conquerorTown.getOwner().setOwnedTown(town);
+
                                 toRemove.clear();
                                 break;
                             }
