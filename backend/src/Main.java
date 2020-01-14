@@ -2,6 +2,7 @@ import game.model.Message;
 import game.model.MessageType;
 import game.model.Player;
 import game.model.map.Town;
+import game.model.map.TreeNode;
 
 import java.awt.*;
 import java.io.*;
@@ -78,7 +79,7 @@ public class Main {
                 while (socket.isConnected()) {
                     Message clientmsg = (Message) input.readObject();
                     if (clientmsg != null) {
-                        LOGGER.log(Level.INFO,clientmsg.getType() + " - " + clientmsg.getPlayer() + ": " + clientmsg.getNote());
+                        LOGGER.log(Level.INFO,clientmsg.getType() + " - " + clientmsg.getPlayer().getName() + ": " + clientmsg.getNote());
                         switch (clientmsg.getType()) {
                             case CONNECTED:
                                 addToList();
@@ -88,10 +89,15 @@ public class Main {
                                 LOGGER.log(Level.INFO, "Map sent to " + name);
                                 break;
                             case ATTACK:
+                                broadcastAttack(clientmsg.getPlayer(), clientmsg.getTreeNodes());
                                 LOGGER.log(Level.INFO, "Attack request from " + name);
                                 break;
                             case REMOVE_ATTACK:
+                                broadcastAttackCancel(clientmsg.getPlayer(), clientmsg.getTreeNodes());
                                 LOGGER.log(Level.INFO, "Cancel attack from " + name);
+                                break;
+                            case CHANGE_OWNER:
+                                LOGGER.log(Level.INFO, "Village changed owner.");
                                 break;
                         }
                     }
@@ -103,44 +109,57 @@ public class Main {
             }
         }
 
-        private Message sendInitialMap() throws IOException{
+        private void sendInitialMap() throws IOException{
             Message msg = new Message();
             msg.setNote("Initial map received");
             msg.setType(MessageType.INIT);
             msg.setPlayer(player);
-            //msg.setTreeNodes(game.getAreaContent());
             msg.setQuadtree(game.getInitialMap());
             write(msg);
-            return msg;
         }
 
-        private Message sendNotification() throws IOException {
+        private void broadcastAttack(Player p, ArrayList<TreeNode> nodes) throws IOException{
+            Message msg = new Message();
+            msg.setNote(p.getName() + " attacks a village.");
+            msg.setType(MessageType.ATTACK);
+            msg.setPlayer(p);
+            msg.setTreeNodes(nodes);
+            write(msg);
+        }
+
+        private void broadcastAttackCancel(Player p, ArrayList<TreeNode> nodes) throws IOException{
+            Message msg = new Message();
+            msg.setNote(p.getName() + " stopped attacking a village");
+            msg.setType(MessageType.REMOVE_ATTACK);
+            msg.setPlayer(p);
+            msg.setTreeNodes(nodes);
+            write(msg);
+        }
+
+        private void sendNotification() throws IOException {
             Message msg = new Message();
             msg.setNote(name + " has joined the game.");
             msg.setType(MessageType.NOTIFICATION);
             msg.setPlayer(player);
             write(msg);
-            return msg;
         }
 
-        private Message removeFromList() throws IOException {
+        private void removeFromList() throws IOException {
             Message msg = new Message();
             msg.setNote(name + " has left the game.");
             msg.setType(MessageType.DISCONNECTED);
             write(msg);
-            return msg;
         }
 
         /*
          * For displaying that a user has joined the server
          */
-        private Message addToList() throws IOException {
+        private void addToList() throws IOException {
             Message msg = new Message();
             msg.setNote("Welcome, may the best win!");
             msg.setType(MessageType.CONNECTED);
             msg.setPlayer(player);
             write(msg);
-            return msg;
         }
 
         /*

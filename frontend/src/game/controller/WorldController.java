@@ -55,6 +55,10 @@ public class WorldController {
         return scroll;
     }
 
+    public void updateQuadtree(ArrayList<TreeNode> nodes){
+        this.wm.updateQuadtree(nodes);
+    }
+
     public void getObjects() {
         try {
             ConnectionController.mapRequest();

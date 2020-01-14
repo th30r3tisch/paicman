@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Quadtree implements Serializable {
+    private static final long serialVersionUID = 5260956141735471739L;
     final int MAX_CAPACITY =4;
     private int level = 0;
     private List<TreeNode> treeNodes;
@@ -101,5 +102,34 @@ public class Quadtree implements Serializable {
         ArrayList<TreeNode> wholeMap = new ArrayList<>();
         getAreaContent(tree, startX, startY, endX, endY, wholeMap);
         return wholeMap;
+    }
+
+    private void addTownAtk(Quadtree tree, Town deff, Town atk){
+        if (tree == null) return;
+
+        if( !(deff.x > tree.boundry.xMax) && !(deff.x < tree.boundry.xMin) && !(deff.y > tree.boundry.yMax) && !(deff.y < tree.boundry.yMin)){
+            for (TreeNode treeNode : tree.treeNodes) {
+                if (treeNode.isNode(deff.x, deff.y)){
+                    if (deff.getConqueredByTowns().size() == 0)
+                        deff.addConqueredByTown(atk);
+                    else{
+                        for (Town t: deff.getConqueredByTowns() ) {
+                            if (t == atk) return;
+                            else deff.addConqueredByTown(atk);
+                        }
+                    }
+                }
+            }
+        }
+        addTownAtk(tree.northWest, deff, atk);
+        addTownAtk(tree.northEast, deff, atk);
+        addTownAtk(tree.southWest, deff, atk);
+        addTownAtk(tree.southEast, deff, atk);
+    }
+
+    public void updateNode(ArrayList<TreeNode> nodes){
+        Town inComingAtk = (Town)nodes.get(0);
+        Town inComingDeff = (Town)nodes.get(1);
+        addTownAtk(this, inComingDeff, inComingAtk);
     }
 }
