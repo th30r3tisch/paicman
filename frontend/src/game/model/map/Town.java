@@ -50,21 +50,13 @@ public class Town extends TreeNode implements Serializable {
     }
 
     public void addConqueredByTown(Town town){
-        ArrayList<TreeNode> list = new ArrayList();
-        list.add(town);
-        list.add(this);
-        ConnectionController.attackRequest(list);
         if(conqueredByTowns == null) conqueredByTowns = new ArrayList<>();
         //set start time for attack, to check for attack ticks later
         this.conqueredByTowns.add(new AbstractMap.SimpleEntry(town, System.currentTimeMillis()));
     }
 
     public void removeConqueredByTown(Town town) {
-        ArrayList<TreeNode> list = new ArrayList();
-        list.add(town);
-        list.add(this);
         System.out.println("in town remove method");
-        ConnectionController.removeAttackRequest(list);
         System.out.println("town in list? " + this.getConqueredByTowns().contains(town));
         this.conqueredByTowns.removeIf(entry -> (entry.getKey() == town));
         this.conqueredByTowns.trimToSize();
@@ -72,10 +64,7 @@ public class Town extends TreeNode implements Serializable {
 
     public void removeAllConquerors(){
         for (AbstractMap.SimpleEntry<Town,Long> conqueror : conqueredByTowns) {
-            ArrayList<TreeNode> list = new ArrayList();
-            list.add(conqueror.getKey());
-            list.add(this);
-            ConnectionController.removeAttackRequest(list);
+            ConnectionController.removeAttackRequest(conqueror.getKey(), this);
         }
         conqueredByTowns = new ArrayList<>();
     }

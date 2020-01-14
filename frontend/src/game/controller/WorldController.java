@@ -99,6 +99,7 @@ public class WorldController {
                         //previous town was selected that belongs to player attack if not reselect to new town
                         if((currentSelect.getOwner() != null && currentSelect.getOwner().getName().equals(player.getName())) && !town.getConqueredByTowns().contains(currentSelect)) {
                             town.addConqueredByTown(currentSelect);
+                            ConnectionController.attackRequest(currentSelect, town);
                             currentSelect = null;
                         } else {
                             currentSelect = town;
@@ -132,6 +133,7 @@ public class WorldController {
                                     //check if you are eligible to abort attack
                                     if(attacker.getOwner().getName().equals(player.getName()))
                                         attacked.removeConqueredByTown(attacker1);
+                                        ConnectionController.removeAttackRequest(attacker1, attacked);
                                     break;
                                 default:
                                     System.out.println("something click");
@@ -240,6 +242,7 @@ public class WorldController {
                     if(toRemove.size() > 0){
                         for (Town remove : toRemove) {
                             town.removeConqueredByTown(remove);
+                            ConnectionController.removeAttackRequest(remove, town);
                         }
                     }
                 }
