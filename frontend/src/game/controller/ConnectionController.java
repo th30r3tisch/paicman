@@ -7,6 +7,7 @@ import game.model.map.TreeNode;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -82,9 +83,13 @@ public class ConnectionController implements Runnable{
                             LOGGER.log(Level.INFO,message.getPlayer().getName() + " attacks a village");
                             break;
                         case REMOVE_ATTACK:
+                            System.out.println("lenght: " + message.getTreeNodes().size());
                             rmupdateQuadtree(message.getTreeNodes());
                             LOGGER.log(Level.INFO,message.getPlayer().getName() + " stopped attacking a village");
                             break;
+                        case CHANGE_OWNER:
+                            updateTownOwnership(message.getPlayer(), message.getTreeNodes());
+                            LOGGER.log(Level.INFO,message.getPlayer().getName() + " has conquered a village");
                     }
                 }
             }
@@ -96,6 +101,11 @@ public class ConnectionController implements Runnable{
 
     private void atkupdateQuadtree(ArrayList<TreeNode> nodes){
             wc.atkupdateQuadtree(nodes);
+
+    }
+
+    private void updateTownOwnership(Player player, ArrayList<TreeNode> nodes){
+        wc.updateTownOwnership(player, nodes.get(0));
     }
 
     private void rmupdateQuadtree(ArrayList<TreeNode> nodes){

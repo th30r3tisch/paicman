@@ -1,5 +1,7 @@
 package game.model.map;
 
+import game.model.Player;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -147,6 +149,18 @@ public class Quadtree implements Serializable {
         addTownAtk(tree.southEast, deff, atk);
     }
 
+
+    private void changeTownOwnership(Quadtree tree ,Player player, Town town){
+        if(tree == null || town == null || player == null) return;
+        for (int i = 0; i < tree.treeNodes.size(); i++){
+            if(tree.treeNodes.get(i).isNode(town.x, town.y)){
+                Town treeTown = (Town) tree.treeNodes.get(i);
+                treeTown.setOwner(player);
+            }
+        }
+    }
+
+
     public void addUpdateNode(ArrayList<TreeNode> nodes){
         Town inComingAtk = (Town)nodes.get(0);
         Town inComingDeff = (Town)nodes.get(1);
@@ -157,5 +171,10 @@ public class Quadtree implements Serializable {
         Town inComingAtk = (Town)nodes.get(0);
         Town inComingDeff = (Town)nodes.get(1);
         rmTownAtk(this, inComingDeff, inComingAtk);
+    }
+
+    public void updateTownOwnership(Player player, TreeNode treeNode){
+        Town town = (Town) treeNode;
+        changeTownOwnership(this, player, town);
     }
 }

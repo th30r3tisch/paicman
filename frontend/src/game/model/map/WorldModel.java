@@ -1,5 +1,6 @@
 package game.model.map;
 
+import game.model.Player;
 import javafx.scene.shape.Shape;
 
 import java.io.Serializable;
@@ -52,6 +53,10 @@ public class WorldModel implements Serializable {
 
     public void rmupdateQuadtree(ArrayList<TreeNode> nodes){
         this.quadtree.rmUpdateNode(nodes);
+    }
+
+    public void updateTownOwnership(Player player, TreeNode treeNode){
+        this.quadtree.updateTownOwnership(player, treeNode);
     }
     
     public void updateTreeNodes(){
