@@ -129,9 +129,10 @@ public class ConnectionController implements Runnable{
         Message mapRequest = new Message();
         mapRequest.setPlayer(player);
         mapRequest.setType(ATTACK);
-        mapRequest.setTreeNodes(new ArrayList<>(){{
-            add(atk);
-            add(deff); }});
+        ArrayList<TreeNode> ar = new ArrayList<>();
+        ar.add(atk);
+        ar.add(deff);
+        mapRequest.setTreeNodes(ar);
         try {
             oos.writeObject(mapRequest);
         } catch (IOException e) {
@@ -140,13 +141,13 @@ public class ConnectionController implements Runnable{
     }
 
     public static void removeAttackRequest(TreeNode atk, TreeNode deff) {
-        System.out.println("in remove attack method");
         Message mapRequest = new Message();
         mapRequest.setPlayer(player);
         mapRequest.setType(REMOVE_ATTACK);
-        mapRequest.setTreeNodes(new ArrayList<>(){{
-            add(atk);
-            add(deff); }});
+        ArrayList<TreeNode> ar = new ArrayList<>();
+        ar.add(atk);
+        ar.add(deff);
+        mapRequest.setTreeNodes(ar);
         try {
             oos.writeObject(mapRequest);
         } catch (IOException e) {

@@ -231,6 +231,7 @@ public class WorldController {
                                 town.getOwner().removeOwnedTown(town);
                                 ConnectionController.changeTownOwnerRequest(player, town);
                                 town.changeOwnership(conquerorTown.getOwner());
+                                ConnectionController.changeTownOwnerRequest(player, town);
                                 //TODO remove later since it is not persistent at this time
                                 if(player.getName().equals(town.getOwner().getName())){
                                     player.setOwnedTown(town);
