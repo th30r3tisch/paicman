@@ -4,6 +4,7 @@ import game.model.Player;
 
 import java.awt.*;
 import java.io.Serializable;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 
 public class Town extends TreeNode implements Serializable {
@@ -11,10 +12,11 @@ public class Town extends TreeNode implements Serializable {
     private Player owner;
     private int life;
     private Color color;
-    private ArrayList<Town> conqueredByTowns;
+    //private ArrayList<Town> conqueredByTowns = new ArrayList<>();
+    private ArrayList<AbstractMap.SimpleEntry<Town, Long>> conqueredByTowns = new ArrayList<>();
 
-    public ArrayList<Town> getConqueredByTowns() { return conqueredByTowns; }
-    public void addConqueredByTown(Town town) { this.conqueredByTowns.add(town); }
+    //public ArrayList<Town> getConqueredByTowns() { return conqueredByTowns; }
+    //public void addConqueredByTown(Town town) { this.conqueredByTowns.add(town); }
     public void removeConqueredByTown(Town town) { }
 
     public Town(int x, int y) {

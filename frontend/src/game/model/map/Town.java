@@ -11,7 +11,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 
 public class Town extends TreeNode implements Serializable {
-    private static final long serialVersionUID = -6888113389669325015L;
+    private static final long serialVersionUID = 7039854518527977825L;
 
     private Player owner;
     private int life;
