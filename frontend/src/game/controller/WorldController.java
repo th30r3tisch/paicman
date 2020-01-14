@@ -79,6 +79,7 @@ public class WorldController {
      */
     public ArrayList<Shape> setUpShapes() {
         ArrayList<Shape> shapes = new ArrayList<>();
+        wm.updateTreeNodes();
         for (TreeNode tn : wm.getTreeNodes()) {
             if (tn instanceof Town) {
 
@@ -102,7 +103,6 @@ public class WorldController {
                     } else if (currentSelect != town) {
                         //previous town was selected that belongs to player attack if not reselect to new town
                         if((currentSelect.getOwner() != null && currentSelect.getOwner().getName().equals(player.getName())) && !town.getConqueredByTowns().contains(currentSelect)) {
-                            town.addConqueredByTown(currentSelect);
                             ConnectionController.attackRequest(currentSelect, town);
                             currentSelect = null;
                         } else {
@@ -118,7 +118,6 @@ public class WorldController {
                             MouseButton button = mouseEvent.getButton();
                             switch (button) {
                                 case SECONDARY:
-
                                     ArrayList<TreeNode> treeNodes = wm.getTreeNodes();
                                     Town attacker1 = null;
                                     Town attacked = null;
@@ -230,6 +229,7 @@ public class WorldController {
                                 town.removeAllConquerors();
                                 if(town.getOwner() != null)
                                 town.getOwner().removeOwnedTown(town);
+                                ConnectionController.changeTownOwnerRequest(player, town);
                                 town.changeOwnership(conquerorTown.getOwner());
                                 //TODO remove later since it is not persistent at this time
                                 if(player.getName().equals(town.getOwner().getName())){

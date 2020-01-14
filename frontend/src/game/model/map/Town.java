@@ -45,7 +45,6 @@ public class Town extends TreeNode implements Serializable {
     }
 
     public void changeOwnership(Player player){
-        ConnectionController.changeTownOwnerRequest(player, this);
         owner = player;
     }
 

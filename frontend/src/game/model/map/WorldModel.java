@@ -19,7 +19,9 @@ public class WorldModel implements Serializable {
         return shapes;
     }
 
-    public ArrayList<TreeNode> getTreeNodes(){ return treeNodes; }
+    public ArrayList<TreeNode> getTreeNodes(){
+        return treeNodes;
+    }
 
     public ArrayList<TreeNode> getAreaContent(int startX, int startY, int endX, int endY) {
         return this.quadtree.getAllContent(quadtree, startX, startY, endX, endY);
@@ -46,5 +48,9 @@ public class WorldModel implements Serializable {
 
     public void updateQuadtree(ArrayList<TreeNode> nodes){
         this.quadtree.updateNode(nodes);
+    }
+    
+    public void updateTreeNodes(){
+        this.treeNodes = this.quadtree.getAllContent(quadtree, 0, 0, 4000, 2000);
     }
 }
