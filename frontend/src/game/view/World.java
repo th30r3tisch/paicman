@@ -114,6 +114,7 @@ public class World implements ViewInterface {
         detailBox.setStyle("-fx-background-color: #FFFAAAA;");
         detailBox.setBackground(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY, Insets.EMPTY)));
         infoBox.setPadding(new Insets(5, 0, 0, 5));
+        infoBox.setMinWidth(150);
         infoBox.getChildren().addAll(
                 playerName,
                 townAmountText,
@@ -145,7 +146,7 @@ public class World implements ViewInterface {
 
     public void updateTownDisplay(Town town){
         if (town == null) {
-            ownerText.setText("Owner: Not conquered");
+            ownerText.setText("Owner: none");
             numSoldierText.setText("Town health: 0");
             return;
         }
