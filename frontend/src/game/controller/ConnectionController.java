@@ -78,11 +78,11 @@ public class ConnectionController implements Runnable{
                             LOGGER.log(Level.INFO,"Disconnected msg");
                             break;
                         case ATTACK:
-                            updateQuadtree(message.getTreeNodes());
+                            atkupdateQuadtree(message.getTreeNodes());
                             LOGGER.log(Level.INFO,message.getPlayer().getName() + " attacks a village");
                             break;
                         case REMOVE_ATTACK:
-                            updateQuadtree(message.getTreeNodes());
+                            rmupdateQuadtree(message.getTreeNodes());
                             LOGGER.log(Level.INFO,message.getPlayer().getName() + " stopped attacking a village");
                             break;
                     }
@@ -94,8 +94,12 @@ public class ConnectionController implements Runnable{
         }
     }
 
-    private void updateQuadtree(ArrayList<TreeNode> nodes){
-            wc.updateQuadtree(nodes);
+    private void atkupdateQuadtree(ArrayList<TreeNode> nodes){
+            wc.atkupdateQuadtree(nodes);
+    }
+
+    private void rmupdateQuadtree(ArrayList<TreeNode> nodes){
+        wc.rmupdateQuadtree(nodes);
     }
 
     public void login() throws IOException {

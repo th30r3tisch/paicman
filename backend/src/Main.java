@@ -97,6 +97,7 @@ public class Main {
                                 LOGGER.log(Level.INFO, "Cancel attack from " + name);
                                 break;
                             case CHANGE_OWNER:
+                                broadcastChangeTownOwner(clientmsg.getPlayer(),clientmsg.getTreeNodes());
                                 LOGGER.log(Level.INFO, "Village changed owner.");
                                 break;
                         }
@@ -107,6 +108,15 @@ public class Main {
             } finally {
                 closeConnections();
             }
+        }
+
+        private void broadcastChangeTownOwner(Player p, ArrayList<TreeNode> nodes) throws IOException{
+            Message msg = new Message();
+            msg.setNote(p.getName() + " has conquered a village");
+            msg.setType(MessageType.CHANGE_OWNER);
+            msg.setPlayer(player);
+            msg.setTreeNodes(nodes);
+            write(msg);
         }
 
         private void sendInitialMap() throws IOException{

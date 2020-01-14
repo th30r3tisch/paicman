@@ -128,9 +128,34 @@ public class Quadtree implements Serializable {
         addTownAtk(tree.southEast, deff, atk);
     }
 
-    public void updateNode(ArrayList<TreeNode> nodes){
+    private void rmTownAtk(Quadtree tree, Town deff, Town atk){
+        if (tree == null) return;
+
+        if( !(deff.x > tree.boundry.xMax) && !(deff.x < tree.boundry.xMin) && !(deff.y > tree.boundry.yMax) && !(deff.y < tree.boundry.yMin)){
+            for (int i = 0; i < tree.treeNodes.size(); i++) {
+                if (tree.treeNodes.get(i).isNode(deff.x, deff.y)){
+                    for (Town tt: deff.getConqueredByTowns() ) {
+                        if (tt == atk) ((Town) tree.treeNodes.get(i)).removeConqueredByTown(atk);
+                        else return;
+                    }
+                }
+            }
+        }
+        addTownAtk(tree.northWest, deff, atk);
+        addTownAtk(tree.northEast, deff, atk);
+        addTownAtk(tree.southWest, deff, atk);
+        addTownAtk(tree.southEast, deff, atk);
+    }
+
+    public void addUpdateNode(ArrayList<TreeNode> nodes){
         Town inComingAtk = (Town)nodes.get(0);
         Town inComingDeff = (Town)nodes.get(1);
         addTownAtk(this, inComingDeff, inComingAtk);
+    }
+
+    public void rmUpdateNode(ArrayList<TreeNode> nodes){
+        Town inComingAtk = (Town)nodes.get(0);
+        Town inComingDeff = (Town)nodes.get(1);
+        rmTownAtk(this, inComingDeff, inComingAtk);
     }
 }

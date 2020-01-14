@@ -46,8 +46,12 @@ public class WorldModel implements Serializable {
         this.treeNodes = this.quadtree.getAllContent(quadtree, 0, 0, 4000, 2000);
     }
 
-    public void updateQuadtree(ArrayList<TreeNode> nodes){
-        this.quadtree.updateNode(nodes);
+    public void atkupdateQuadtree(ArrayList<TreeNode> nodes){
+        this.quadtree.addUpdateNode(nodes);
+    }
+
+    public void rmupdateQuadtree(ArrayList<TreeNode> nodes){
+        this.quadtree.rmUpdateNode(nodes);
     }
     
     public void updateTreeNodes(){

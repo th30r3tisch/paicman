@@ -55,8 +55,12 @@ public class WorldController {
         return scroll;
     }
 
-    public void updateQuadtree(ArrayList<TreeNode> nodes){
-        this.wm.updateQuadtree(nodes);
+    public void atkupdateQuadtree(ArrayList<TreeNode> nodes){
+        this.wm.atkupdateQuadtree(nodes);
+    }
+
+    public void rmupdateQuadtree(ArrayList<TreeNode> nodes){
+        this.wm.rmupdateQuadtree(nodes);
     }
 
     public void getObjects() {
@@ -135,7 +139,6 @@ public class WorldController {
                                     }
                                     //check if you are eligible to abort attack
                                     if(attacker.getOwner().getName().equals(player.getName()))
-                                        attacked.removeConqueredByTown(attacker1);
                                         ConnectionController.removeAttackRequest(attacker1, attacked);
                                     break;
                                 default:
@@ -228,7 +231,6 @@ public class WorldController {
                             if(town.getLife() <= 0){
                                 town.removeAllConquerors();
                                 if(town.getOwner() != null)
-                                town.getOwner().removeOwnedTown(town);
                                 ConnectionController.changeTownOwnerRequest(player, town);
                                 town.changeOwnership(conquerorTown.getOwner());
                                 ConnectionController.changeTownOwnerRequest(player, town);
