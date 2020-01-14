@@ -97,9 +97,11 @@ public class World implements ViewInterface {
     private Text ownerText;
     private int numOfTowns = 0;
     private int numOfSoldiers = 0;
+    private Text playerName;
     private AnchorPane getInfoBox(){
         AnchorPane parent = new AnchorPane();
         VBox infoBox = new VBox();
+        playerName = new Text();
         townAmountText = new Text();
         //exampleText
         townAmountText.setText("Your Towns: " + numOfTowns);
@@ -113,6 +115,7 @@ public class World implements ViewInterface {
         detailBox.setBackground(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY, Insets.EMPTY)));
 
         infoBox.getChildren().addAll(
+                playerName,
                 townAmountText,
                 ownerText,
                 numSoldierText
@@ -135,6 +138,8 @@ public class World implements ViewInterface {
     }
 
     public void updatePlayerStat(Player player){
+        playerName.setText(player.getName());
+        playerName.setFill(player.getFXColor());
         townAmountText.setText("Your Towns: " +   player.getOwnedTowns().size());
     }
 
