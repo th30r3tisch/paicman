@@ -113,7 +113,7 @@ public class World implements ViewInterface {
         //not working yet
         detailBox.setStyle("-fx-background-color: #FFFAAAA;");
         detailBox.setBackground(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY, Insets.EMPTY)));
-
+        infoBox.setPadding(new Insets(5, 0, 0, 5));
         infoBox.getChildren().addAll(
                 playerName,
                 townAmountText,
@@ -144,6 +144,11 @@ public class World implements ViewInterface {
     }
 
     public void updateTownDisplay(Town town){
+        if (town == null) {
+            ownerText.setText("");
+            numSoldierText.setText("");
+            return;
+        }
         String text = "Not conquered";
         if(town.getOwner() != null){
             text = town.getOwner().getName();

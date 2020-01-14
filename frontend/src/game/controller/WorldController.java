@@ -86,9 +86,11 @@ public class WorldController {
                 Player player = ConnectionController.getPlayer();
 
                 if (currentSelect == town) {
-                    shape.setStrokeWidth(5);
+                    shape.setStrokeWidth(3);
                     shape.setStroke(Color.RED);
-                    world.updateTownDisplay(town);
+                    world.updateTownDisplay(currentSelect);
+                } else if(currentSelect == null){
+                    world.updateTownDisplay(currentSelect);
                 }
                 world.updatePlayerStat(player);
                 shape.setOnMousePressed(mouseEvent -> {
