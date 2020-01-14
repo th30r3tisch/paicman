@@ -145,8 +145,8 @@ public class World implements ViewInterface {
 
     public void updateTownDisplay(Town town){
         if (town == null) {
-            ownerText.setText("");
-            numSoldierText.setText("");
+            ownerText.setText("Owner: Not conquered");
+            numSoldierText.setText("Town health: 0");
             return;
         }
         String text = "Not conquered";

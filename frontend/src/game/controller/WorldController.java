@@ -65,7 +65,6 @@ public class WorldController {
 
     public void addQuadTree(Quadtree quadtree) {
         this.wm.setQuadtree(quadtree);
-        Player player = ConnectionController.getPlayer();
     }
 
     private Town currentSelect;
@@ -90,17 +89,12 @@ public class WorldController {
                     shape.setStroke(Color.RED);
                     world.updateTownDisplay(currentSelect);
                 } else if(currentSelect == null){
-                    world.updateTownDisplay(currentSelect);
+                    world.updateTownDisplay(null);
                 }
                 world.updatePlayerStat(player);
                 shape.setOnMousePressed(mouseEvent -> {
-                    shape.setCursor(Cursor.MOVE);
-                    world.updateTownDisplay(town);
-                    System.out.println("click event");
                     if (currentSelect == null) {
                         currentSelect = town;
-                        shape.setStrokeWidth(3);
-                        shape.setStroke(Color.RED);
                     } else if (currentSelect != town) {
                         //previous town was selected that belongs to player attack if not reselect to new town
                         if((currentSelect.getOwner() != null && currentSelect.getOwner().getName().equals(player.getName())) && !town.getConqueredByTowns().contains(currentSelect)) {
