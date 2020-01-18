@@ -62,9 +62,6 @@ public class Town extends TreeNode implements Serializable {
     }
 
     public void removeAllConquerors(){
-        for (AbstractMap.SimpleEntry<Town,Long> conqueror : conqueredByTowns) {
-            ConnectionController.removeAttackRequest(conqueror.getKey(), this);
-        }
         conqueredByTowns = new ArrayList<>();
     }
 
@@ -79,6 +76,7 @@ public class Town extends TreeNode implements Serializable {
     public Player getOwner() { return owner; }
 
     public void setOwner(Player conqueror) {
+        System.out.println("conqueror name:" + conqueror.getName());
         this.owner = conqueror;
         this.color = conqueror.getColor();
     }

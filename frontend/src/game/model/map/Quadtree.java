@@ -1,5 +1,6 @@
 package game.model.map;
 
+import game.controller.ConnectionController;
 import game.model.Player;
 
 import java.io.Serializable;
@@ -152,10 +153,19 @@ public class Quadtree implements Serializable {
 
     private void changeTownOwnership(Quadtree tree ,Player player, Town town){
         if(tree == null || town == null || player == null) return;
+        System.out.println("change owner: " + town.getX() + " " + town.getY());
+        System.out.println("treenode lenght: " + tree.treeNodes.size());
         for (int i = 0; i < tree.treeNodes.size(); i++){
+            System.out.println("current town to check " + tree.treeNodes.get(i).getX() + " " + tree.treeNodes.get(i).getY());
             if(tree.treeNodes.get(i).isNode(town.x, town.y)){
-                Town treeTown = (Town) tree.treeNodes.get(i);
-                treeTown.setOwner(player);
+                System.out.println("found conquered town " + tree.treeNodes.get(i).getX());
+                Player thisPlayer = ConnectionController.getPlayer();
+                if(thisPlayer.getName().equals(town.getOwner().getName()))
+                    thisPlayer.removeOwnedTown(town);
+                else if(thisPlayer.getName().equals(player.getName()))
+                    player.setOwnedTown(town);
+                ((Town) tree.treeNodes.get(i)).setOwner(player);
+                return;
             }
         }
     }
@@ -174,7 +184,6 @@ public class Quadtree implements Serializable {
     }
 
     public void updateTownOwnership(Player player, TreeNode treeNode){
-        Town town = (Town) treeNode;
-        changeTownOwnership(this, player, town);
+        changeTownOwnership(this, player, ((Town) treeNode));
     }
 }
