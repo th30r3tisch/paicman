@@ -173,6 +173,7 @@ public class ConnectionController implements Runnable{
         Message mapRequest = new Message();
         mapRequest.setPlayer(player);
         mapRequest.setType(CHANGE_OWNER);
+        System.out.println("to send town: "+ town.getX() + " " + town.getY());
         ArrayList<TreeNode> townList = new ArrayList<>();
         townList.add(town);
         mapRequest.setTreeNodes(townList);

@@ -1,5 +1,6 @@
 package game.model.map;
 
+import game.controller.ConnectionController;
 import game.model.Player;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.util.logging.Logger;
 
 public class Quadtree implements Serializable {
     private static final long serialVersionUID = 5260956141735471739L;
-    final int MAX_CAPACITY =4;
+    final int MAX_CAPACITY = 4;
     private int level = 0;
     private List<TreeNode> treeNodes;
     private Quadtree northWest = null;
@@ -81,15 +82,15 @@ public class Quadtree implements Serializable {
         else if (this.southEast.boundry.inRange(x, y))
             this.southEast.insert(treeNode);
         else
-            LOGGER.log(Level.SEVERE, "ERROR : Unhandled partition " + x + " " +  y);
+            LOGGER.log(Level.SEVERE, "ERROR : Unhandled partition " + x + " " + y);
     }
 
     public void getAreaContent(Quadtree tree, int startX, int startY, int endX, int endY, ArrayList<TreeNode> wholeMap) {
         if (tree == null) return;
 
-        if( !(startX > tree.boundry.xMax) && !(endX < tree.boundry.xMin) && !(startY > tree.boundry.yMax) && !(endY < tree.boundry.yMin)){
+        if (!(startX > tree.boundry.xMax) && !(endX < tree.boundry.xMin) && !(startY > tree.boundry.yMax) && !(endY < tree.boundry.yMin)) {
             for (TreeNode treeNode : tree.treeNodes) {
-                if (treeNode.inRange(startX, startY, endX, endY)){
+                if (treeNode.inRange(startX, startY, endX, endY)) {
                     wholeMap.add(treeNode);
                 }
             }
@@ -100,23 +101,23 @@ public class Quadtree implements Serializable {
         getAreaContent(tree.southEast, startX, startY, endX, endY, wholeMap);
     }
 
-    public ArrayList<TreeNode> getAllContent(Quadtree tree, int startX, int startY, int endX, int endY){
+    public ArrayList<TreeNode> getAllContent(Quadtree tree, int startX, int startY, int endX, int endY) {
         ArrayList<TreeNode> wholeMap = new ArrayList<>();
         getAreaContent(tree, startX, startY, endX, endY, wholeMap);
         return wholeMap;
     }
 
-    private void addTownAtk(Quadtree tree, Town deff, Town atk){
+    private void addTownAtk(Quadtree tree, Town deff, Town atk) {
         if (tree == null) return;
 
-        if( !(deff.x > tree.boundry.xMax) && !(deff.x < tree.boundry.xMin) && !(deff.y > tree.boundry.yMax) && !(deff.y < tree.boundry.yMin)){
+        if (!(deff.x > tree.boundry.xMax) && !(deff.x < tree.boundry.xMin) && !(deff.y > tree.boundry.yMax) && !(deff.y < tree.boundry.yMin)) {
             for (int i = 0; i < tree.treeNodes.size(); i++) {
-                if (tree.treeNodes.get(i).isNode(deff.x, deff.y)){
+                if (tree.treeNodes.get(i).isNode(deff.x, deff.y)) {
                     Town t = (Town) tree.treeNodes.get(i);
                     if (t.getConqueredByTowns().size() == 0)
                         ((Town) tree.treeNodes.get(i)).addConqueredByTown(atk);
-                    else{
-                        for (Town tt: deff.getConqueredByTowns() ) {
+                    else {
+                        for (Town tt : deff.getConqueredByTowns()) {
                             if (tt == atk) return;
                             else ((Town) tree.treeNodes.get(i)).addConqueredByTown(atk);
                         }
@@ -130,13 +131,13 @@ public class Quadtree implements Serializable {
         addTownAtk(tree.southEast, deff, atk);
     }
 
-    private void rmTownAtk(Quadtree tree, Town deff, Town atk){
+    private void rmTownAtk(Quadtree tree, Town deff, Town atk) {
         if (tree == null) return;
 
-        if( !(deff.x > tree.boundry.xMax) && !(deff.x < tree.boundry.xMin) && !(deff.y > tree.boundry.yMax) && !(deff.y < tree.boundry.yMin)){
+        if (!(deff.x > tree.boundry.xMax) && !(deff.x < tree.boundry.xMin) && !(deff.y > tree.boundry.yMax) && !(deff.y < tree.boundry.yMin)) {
             for (int i = 0; i < tree.treeNodes.size(); i++) {
-                if (tree.treeNodes.get(i).isNode(deff.x, deff.y)){
-                    for (Town tt: deff.getConqueredByTowns() ) {
+                if (tree.treeNodes.get(i).isNode(deff.x, deff.y)) {
+                    for (Town tt : deff.getConqueredByTowns()) {
                         if (tt == atk) ((Town) tree.treeNodes.get(i)).removeConqueredByTown(atk);
                         else return;
                     }
@@ -150,31 +151,44 @@ public class Quadtree implements Serializable {
     }
 
 
-    private void changeTownOwnership(Quadtree tree ,Player player, Town town){
-        if(tree == null || town == null || player == null) return;
-        for (int i = 0; i < tree.treeNodes.size(); i++){
-            if(tree.treeNodes.get(i).isNode(town.x, town.y)){
-                Town treeTown = (Town) tree.treeNodes.get(i);
-                treeTown.setOwner(player);
+    private void changeTownOwnership(Quadtree tree, Player player, Town town) {
+        if (tree == null || town == null || player == null) return;
+        if (!(town.x > tree.boundry.xMax) && !(town.x < tree.boundry.xMin) && !(town.y > tree.boundry.yMax) && !(town.y < tree.boundry.yMin)) {
+            for (int i = 0; i < tree.treeNodes.size(); i++) {
+                if (tree.treeNodes.get(i).isNode(town.x, town.y)) {
+                    if (town.getOwner() != null && !town.getOwner().getName().equals(ConnectionController.getPlayer().getName())) {
+                        ConnectionController.getPlayer().removeOwnedTown(town);
+                    }
+                    else if (player.getName().equals(ConnectionController.getPlayer().getName())) {
+                        ConnectionController.getPlayer().setOwnedTown(town);
+                    }
+                    ((Town)tree.treeNodes.get(i)).removeAllConquerors();
+                    ((Town)tree.treeNodes.get(i)).setOwner(player);
+                    return;
+                }
             }
         }
+
+        changeTownOwnership(tree.northWest, player, town);
+        changeTownOwnership(tree.northEast, player, town);
+        changeTownOwnership(tree.southWest, player, town);
+        changeTownOwnership(tree.southEast, player, town);
     }
 
 
-    public void addUpdateNode(ArrayList<TreeNode> nodes){
-        Town inComingAtk = (Town)nodes.get(0);
-        Town inComingDeff = (Town)nodes.get(1);
+    public void addUpdateNode(ArrayList<TreeNode> nodes) {
+        Town inComingAtk = (Town) nodes.get(0);
+        Town inComingDeff = (Town) nodes.get(1);
         addTownAtk(this, inComingDeff, inComingAtk);
     }
 
-    public void rmUpdateNode(ArrayList<TreeNode> nodes){
-        Town inComingAtk = (Town)nodes.get(0);
-        Town inComingDeff = (Town)nodes.get(1);
+    public void rmUpdateNode(ArrayList<TreeNode> nodes) {
+        Town inComingAtk = (Town) nodes.get(0);
+        Town inComingDeff = (Town) nodes.get(1);
         rmTownAtk(this, inComingDeff, inComingAtk);
     }
 
-    public void updateTownOwnership(Player player, TreeNode treeNode){
-        Town town = (Town) treeNode;
-        changeTownOwnership(this, player, town);
+    public void updateTownOwnership(Player player, TreeNode treeNode) {
+        changeTownOwnership(this, player, ((Town) treeNode));
     }
 }
