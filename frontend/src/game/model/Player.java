@@ -14,7 +14,14 @@ public class Player implements Serializable {
 
     public ArrayList<Town> getOwnedTowns() { return ownedTowns; }
     public void setOwnedTown(Town town) { this.ownedTowns.add(town); }
-    public void removeOwnedTown(Town town){ }
+    public void removeOwnedTown(Town town){
+        for(Town t : ownedTowns){
+            if(t.getX() == town.getX() && t.getY() == town.getY()){
+                ownedTowns.remove(t);
+                break;
+            }
+        }
+    }
 
     public Color getColor() {
         return this.color;
