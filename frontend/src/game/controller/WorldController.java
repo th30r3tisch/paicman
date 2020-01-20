@@ -231,7 +231,6 @@ public class WorldController {
                             //town is conquered abort all attacks and change owner
                             if (town.getLife() <= 0 && town.getConqueredByTowns().size() > 0) {
                                 //remove all might has to be changed
-                                town.removeAllConquerors();
                                 ConnectionController.changeTownOwnerRequest(player, town);
                                 toRemove.clear();
                                 break;

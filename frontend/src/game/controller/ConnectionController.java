@@ -7,7 +7,6 @@ import game.model.map.TreeNode;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -61,6 +60,9 @@ public class ConnectionController implements Runnable{
                     switch (message.getType()) {
                         case PLAYER:
                             LOGGER.log(Level.INFO,"Player msg");
+                            System.out.println("case player");
+                            System.out.println("player old " + player.getName());
+                            System.out.println("player new" + message.getPlayer().getName());
                             player = message.getPlayer();
                             break;
                         case NOTIFICATION:
@@ -68,6 +70,8 @@ public class ConnectionController implements Runnable{
                             break;
                         case INIT:
                             LOGGER.log(Level.INFO,"Server msg");
+                            System.out.println("case init");
+                            System.out.println("player new " + message.getPlayer().getName());
                             updatePlayer(message.getPlayer());
                             wc.addQuadTree(message.getQuadtree());
                             break;
@@ -125,9 +129,23 @@ public class ConnectionController implements Runnable{
     }
 
     private void updatePlayer(Player player){
-        ConnectionController.player.setColor(player.getColor());
-        for (Town t: player.getOwnedTowns()) {
-            ConnectionController.player.setOwnedTown(t);
+        if(ConnectionController.player.getName().equals(player.getName())) {
+            if (ConnectionController.player.getColor() == null) {
+                System.out.println("updating color of " + ConnectionController.player.getName());
+                ConnectionController.player.setColor(player.getColor());
+            }
+            for (Town t : player.getOwnedTowns()) {
+                boolean isIn = false;
+                for(Town owned: ConnectionController.getPlayer().getOwnedTowns()) {
+                    if (owned.getX() == t.getX() && owned.getX() == t.getY()) {
+                        isIn = true;
+                        break;
+                    }
+                }
+                if(!isIn){
+                    ConnectionController.getPlayer().setOwnedTown(t);
+                }
+            }
         }
     }
 
