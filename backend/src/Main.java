@@ -89,7 +89,9 @@ public class Main {
                                 LOGGER.log(Level.INFO, "Map sent to " + name);
                                 break;
                             case ATTACK:
-                                broadcastAttack(clientmsg.getPlayer(), clientmsg.getTreeNodes());
+                                if (!game.isIntersecting(clientmsg.getTreeNodes())){
+                                    broadcastAttack(clientmsg.getPlayer(), clientmsg.getTreeNodes());
+                                }
                                 LOGGER.log(Level.INFO, "Attack request from " + name);
                                 break;
                             case REMOVE_ATTACK:

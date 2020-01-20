@@ -1,5 +1,6 @@
 import game.model.map.*;
 
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
@@ -15,6 +16,8 @@ class Game {
     private int gameMapWidth = 4000; // has to match with the gameMapWidth in frontend
     private int distanceToEdge = 100;
     private int townMinDist = 100;
+    private int obstacleMinLength = 50;
+    private int obstacleMaxLength = 400;
     private ArrayList<TreeNode> areaContent;
 
     public Game() {
@@ -39,8 +42,10 @@ class Game {
          while(t == null){
              int x = randomNumber(distanceToEdge, gameMapWidth - distanceToEdge);
              int y = randomNumber(distanceToEdge, gameMapHeight - distanceToEdge);
-             if (this.getAreaContent((x - townMinDist), (y - townMinDist), (x + townMinDist), (y + townMinDist)).size() == 0) {
-                 t = new Town(x, y);
+             if (this.getAreaContent((x - townMinDist), (y - townMinDist), (x + townMinDist), (y + townMinDist)).size() == 0) { // check for overlapping towns
+                 if (this.getAreaContent((x - obstacleMaxLength), (y - obstacleMaxLength), (x + townMinDist), (y + townMinDist)).size() == 0) { // check for overlapping obstacles
+                     t = new Town(x, y);
+                 }
              }
          }
          this.world.insert(t);
@@ -53,8 +58,36 @@ class Game {
                      randomNumber(distanceToEdge, gameMapWidth - distanceToEdge),
                      randomNumber(distanceToEdge, gameMapHeight - distanceToEdge),
                      randomNumber(0, 1),
-                     randomNumber(50, 400)));
+                     randomNumber(obstacleMinLength, obstacleMaxLength)));
          }
+     }
+
+     public boolean isIntersecting(ArrayList<TreeNode> towns){
+        ArrayList<TreeNode> intersectionObjs = new ArrayList<>();
+        //rectangle between towns
+        int t1x = (int) towns.get(0).getX();
+        int t1y = (int) towns.get(0).getY();
+        int t2x = (int) towns.get(1).getX();
+        int t2y = (int) towns.get(1).getY();
+        int startX = Math.min(t1x, t2x);
+        int startY = Math.min(t1y, t2y);
+        int endX = Math.max(t1x, t2x);
+        int endY = Math.max(t1y, t2y);
+        intersectionObjs.addAll(this.getAreaContent(startX, startY, endX, endY));
+        //rectangle around town one
+         intersectionObjs.addAll(this.getAreaContent(t1x - obstacleMaxLength, t1y - obstacleMaxLength, t1x + obstacleMaxLength, t1y + obstacleMaxLength));
+         //rectangle around town two
+         intersectionObjs.addAll(this.getAreaContent(t2x - obstacleMaxLength, t2y - obstacleMaxLength, t2x + obstacleMaxLength, t2y + obstacleMaxLength));
+         if (intersectionObjs.size() != 0) {
+             for (TreeNode node: intersectionObjs ) {
+                if(node instanceof Obstacle){
+                    boolean intersecting;
+                    intersecting = Line2D.linesIntersect(towns.get(0).getX(),towns.get(0).getY(),towns.get(1).getX(),towns.get(1).getY(), node.getX(), node.getY(), node.getX() + ((Obstacle) node).getWidth(), node.getY() + ((Obstacle) node).getHeight());
+                    if (intersecting) return true;
+                }
+             }
+         }
+         return false;
      }
 
      private int randomNumber(int min, int max){
