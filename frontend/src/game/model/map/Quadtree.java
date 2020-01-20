@@ -117,10 +117,11 @@ public class Quadtree implements Serializable {
                     if (t.getConqueredByTowns().size() == 0)
                         ((Town) tree.treeNodes.get(i)).addConqueredByTown(atk);
                     else {
-                        for (Town tt : deff.getConqueredByTowns()) {
-                            if (tt == atk) return;
-                            else ((Town) tree.treeNodes.get(i)).addConqueredByTown(atk);
+                        for (Town tt : ((Town)tree.treeNodes.get(i)).getConqueredByTowns()) {
+                            if (tt.isNode(atk.getX(), atk.getY())) return;
                         }
+                        ((Town) tree.treeNodes.get(i)).addConqueredByTown(atk);
+                        return;
                     }
                 }
             }
