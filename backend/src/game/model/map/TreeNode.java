@@ -18,5 +18,9 @@ public class TreeNode implements Serializable {
                 && this.y >= startY && this.y <= endY);
     }
 
+    public boolean isNode(float x, float y){
+        return (this.x == x && this.y == y);
+    }
+
     TreeNode(){ }
 }

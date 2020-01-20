@@ -10,7 +10,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 
 public class Town extends TreeNode implements Serializable {
-    private static final long serialVersionUID = 7039854518527977825L;
+    private static final long serialVersionUID = -5426891661570097468L;
 
     private Player owner;
     private int life;
@@ -53,9 +53,7 @@ public class Town extends TreeNode implements Serializable {
     }
 
     public void removeConqueredByTown(Town town) {
-        System.out.println("in town remove method");
-        System.out.println("town in list? " + this.getConqueredByTowns().contains(town));
-        this.conqueredByTowns.removeIf(entry -> (entry.getKey().isNode(town.x, town.y)));
+        this.conqueredByTowns.removeIf(entry -> (entry.getKey().isNode(town.getX(), town.getY())));
         this.conqueredByTowns.trimToSize();
     }
 

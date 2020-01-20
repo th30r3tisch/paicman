@@ -15,12 +15,33 @@ public class Town extends TreeNode implements Serializable {
     //private ArrayList<Town> conqueredByTowns = new ArrayList<>();
     private ArrayList<AbstractMap.SimpleEntry<Town, Long>> conqueredByTowns = new ArrayList<>();
 
-    //public ArrayList<Town> getConqueredByTowns() { return conqueredByTowns; }
-    //public void addConqueredByTown(Town town) { this.conqueredByTowns.add(town); }
-    public void removeConqueredByTown(Town town) { }
+    public ArrayList<Town> getConqueredByTowns() {
+        ArrayList<Town> towns = new ArrayList<>();
+        if(conqueredByTowns != null && conqueredByTowns.size() > 0) {
+            for (AbstractMap.SimpleEntry<Town, Long> entry : conqueredByTowns) {
+                Town town = entry.getKey();
+                towns.add(town);
+            }
+        }
+        return towns;
+    }
+
+    public void removeAllConquerors(){
+        conqueredByTowns = new ArrayList<>();
+    }
+
+    public void addConqueredByTown(Town town){
+        if(conqueredByTowns == null) conqueredByTowns = new ArrayList<>();
+        this.conqueredByTowns.add(new AbstractMap.SimpleEntry(town, System.currentTimeMillis()));
+    }
+
+    public void removeConqueredByTown(Town town) {
+        this.conqueredByTowns.removeIf(entry -> (entry.getKey().isNode(town.getX(), town.getY())));
+        this.conqueredByTowns.trimToSize();
+    }
 
     public Town(int x, int y) {
-        this.life = 20;
+        this.life = 10;
         this.x = x;
         this.y = y;
     }

@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Quadtree implements Serializable {
-    private static final long serialVersionUID = 5260956141735471739L;
+    private static final long serialVersionUID = -4047965881155594845L;
     final int MAX_CAPACITY = 4;
     private int level = 0;
     private List<TreeNode> treeNodes;

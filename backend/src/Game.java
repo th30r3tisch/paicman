@@ -1,3 +1,4 @@
+import game.model.Player;
 import game.model.map.*;
 
 import java.awt.geom.Line2D;
@@ -102,4 +103,16 @@ class Game {
      public Quadtree getInitialMap(){
         return this.world.getQuadtree();
      }
+
+     public void updateTownOwner (Player player, Town town){
+        world.getQuadtree().updateOwner(player, town);
+     }
+
+     public void addAttackTown(Town atk, Town def){
+        world.getQuadtree().addUpdateNode(atk, def);
+     }
+
+    public void removeAttackTown(ArrayList<TreeNode> nodes){
+        world.getQuadtree().rmUpdateNode(nodes);
+    }
 }

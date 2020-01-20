@@ -116,7 +116,8 @@ public class Main {
             Message msg = new Message();
             msg.setNote(p.getName() + " has conquered a village");
             msg.setType(MessageType.CHANGE_OWNER);
-            msg.setPlayer(player);
+            msg.setPlayer(p);
+            game.updateTownOwner(p, (Town)(nodes.get(0)));
             msg.setTreeNodes(nodes);
             write(msg);
         }
@@ -135,6 +136,7 @@ public class Main {
             msg.setNote(p.getName() + " attacks a village.");
             msg.setType(MessageType.ATTACK);
             msg.setPlayer(p);
+            game.addAttackTown((Town)nodes.get(0), (Town)nodes.get(1));
             msg.setTreeNodes(nodes);
             write(msg);
         }
@@ -144,6 +146,7 @@ public class Main {
             msg.setNote(p.getName() + " stopped attacking a village");
             msg.setType(MessageType.REMOVE_ATTACK);
             msg.setPlayer(p);
+            game.removeAttackTown(nodes);
             msg.setTreeNodes(nodes);
             write(msg);
         }

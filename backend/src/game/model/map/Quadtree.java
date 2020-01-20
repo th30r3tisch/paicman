@@ -1,5 +1,7 @@
 package game.model.map;
 
+import game.model.Player;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,5 +103,93 @@ public class Quadtree implements Serializable {
         ArrayList<TreeNode> wholeMap = new ArrayList<>();
         getAreaContent(tree, startX, startY, endX, endY, wholeMap);
         return wholeMap;
+    }
+
+    private void addTownAtk(Quadtree tree, Town atk, Town deff){
+        if (tree == null) return;
+
+        if (!(deff.x > tree.boundry.xMax) && !(deff.x < tree.boundry.xMin) && !(deff.y > tree.boundry.yMax) && !(deff.y < tree.boundry.yMin)) {
+            for (int i = 0; i < tree.treeNodes.size(); i++) {
+                if (tree.treeNodes.get(i).isNode(deff.x, deff.y)) {
+                    Town t = (Town) tree.treeNodes.get(i);
+                    if (t.getConqueredByTowns().size() == 0) {
+                        ((Town) tree.treeNodes.get(i)).addConqueredByTown(atk);
+                        ((Town) tree.treeNodes.get(i)).setLife(deff.getLife());
+                    }
+                    else {
+                        for (Town tt : deff.getConqueredByTowns()) {
+                            if (tt == atk) return;
+                            else {
+                                ((Town) tree.treeNodes.get(i)).addConqueredByTown(atk);
+                                ((Town) tree.treeNodes.get(i)).setLife(deff.getLife());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        addTownAtk(tree.northWest, deff, atk);
+        addTownAtk(tree.northEast, deff, atk);
+        addTownAtk(tree.southWest, deff, atk);
+        addTownAtk(tree.southEast, deff, atk);
+    }
+
+    private void rmTownAtk(Quadtree tree, Town deff, Town atk) {
+        if (tree == null) return;
+
+        if (!(deff.x > tree.boundry.xMax) && !(deff.x < tree.boundry.xMin) && !(deff.y > tree.boundry.yMax) && !(deff.y < tree.boundry.yMin)) {
+            for (int i = 0; i < tree.treeNodes.size(); i++) {
+                if (tree.treeNodes.get(i).isNode(deff.x, deff.y)) {
+                    for (Town tt : deff.getConqueredByTowns()) {
+                        if (tt == atk) {
+                            ((Town) tree.treeNodes.get(i)).removeConqueredByTown(atk);
+                            ((Town) tree.treeNodes.get(i)).setLife(deff.getLife());
+                        }
+                        else return;
+                    }
+                }
+            }
+        }
+        rmTownAtk(tree.northWest, deff, atk);
+        rmTownAtk(tree.northEast, deff, atk);
+        rmTownAtk(tree.southWest, deff, atk);
+        rmTownAtk(tree.southEast, deff, atk);
+    }
+
+    
+
+    private void updateOwner(Quadtree tree, Player player, TreeNode treeNode){
+        if (tree == null) return;
+
+        if( !(treeNode.getX() > tree.boundry.xMax) && !(treeNode.getX() < tree.boundry.xMin) && !(treeNode.getY() > tree.boundry.yMax) && !(treeNode.getY() < tree.boundry.yMin)){
+            for (int i = 0; i < tree.treeNodes.size(); i++) {
+                if (tree.treeNodes.get(i).isNode(treeNode.getX(), treeNode.getX())){
+                    System.out.println("update owner " + player.getName());
+                    ((Town) tree.treeNodes.get(i)).removeAllConquerors();
+                    ((Town) tree.treeNodes.get(i)).setOwner(player);
+                    ((Town) tree.treeNodes.get(i)).setLife(((Town)treeNode).getLife());
+
+                    return;
+                }
+            }
+        }
+        updateOwner(tree.northWest, player, treeNode);
+        updateOwner(tree.northEast, player, treeNode);
+        updateOwner(tree.southWest, player, treeNode);
+        updateOwner(tree.southEast, player, treeNode);
+    }
+
+    public void addUpdateNode(Town attacker, Town defender){
+        addTownAtk(this, attacker, defender);
+    }
+
+    public void rmUpdateNode(ArrayList<TreeNode> nodes) {
+        Town inComingAtk = (Town) nodes.get(0);
+        Town inComingDeff = (Town) nodes.get(1);
+        rmTownAtk(this, inComingDeff, inComingAtk);
+    }
+
+    public void updateOwner(Player player,TreeNode treeNode){
+        updateOwner(this, player, treeNode);
     }
 }

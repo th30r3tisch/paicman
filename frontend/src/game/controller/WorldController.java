@@ -112,8 +112,6 @@ public class WorldController {
                         if ((currentSelect.getOwner() != null && currentSelect.getOwner().getName().equals(player.getName())) && !town.getConqueredByTowns().contains(currentSelect)) {
                             ConnectionController.attackRequest(currentSelect, town);
                             currentSelect = null;
-                        } else {
-                            currentSelect = town;
                         }
                     } else currentSelect = null;
                 });
@@ -121,6 +119,7 @@ public class WorldController {
                 if (town.getConqueredByTowns().size() > 0) {
                     for (Town attacker : town.getConqueredByTowns()) {
                         Line line = new Line(attacker.getX(), attacker.getY(), town.getX(), town.getY());
+                        Town finalAttacker = ((Town)wm.getTreeNode(attacker));;
                         line.setOnMouseClicked(mouseEvent -> {
                             MouseButton button = mouseEvent.getButton();
                             switch (button) {
@@ -133,23 +132,28 @@ public class WorldController {
                                         if (treeNodes.get(counter) instanceof Town) {
                                             Town currentTown = (Town) treeNodes.get(counter);
                                             if (currentTown.getX() == line.getStartX() && currentTown.getY() == line.getStartY()) {
-                                                attacker1 = currentTown;
+                                                attacker1 = finalAttacker;
                                             } else if (currentTown.getX() == line.getEndX() && currentTown.getY() == line.getEndY())
-                                                attacked = currentTown;
+                                                attacked = (Town)wm.getTreeNode(currentTown);
                                         }
                                         counter++;
                                     }
                                     //check if you are eligible to abort attack
-                                    if (attacker.getOwner().getName().equals(player.getName()))
+                                    if (finalAttacker.getOwner().getName().equals(player.getName())){
+                                        System.out.println("attacker owner "+ finalAttacker.getOwner());
                                         ConnectionController.removeAttackRequest(attacker1, attacked);
+                                    }
+
                                     break;
                                 default:
                                     System.out.println("something click");
                             }
                         });
+
                         line.setStrokeWidth(8);
-                        line.setStroke(attacker.getOwner().getFXColor());
+                        line.setStroke(finalAttacker.getOwner().getFXColor());
                         shapes.add(line);
+
                     }
                 }
                 shapes.add(shape);
@@ -211,7 +215,7 @@ public class WorldController {
                     for (AbstractMap.SimpleEntry<Town, Long> conqueror : conquerors) {
 
                         //every passing two seconds town loses health
-                        Town conquerorTown = conqueror.getKey();
+                        Town conquerorTown = (Town) wm.getTreeNode( conqueror.getKey());
                         if ((System.currentTimeMillis() - conqueror.getValue().longValue()) % 2000 >= 1000) {
                             //update attack damage
                             //if its an enemy decrease health
@@ -221,7 +225,8 @@ public class WorldController {
                             } else {
                                 town.setLife(town.getLife() + 1);
                             }
-                            conquerorTown.setLife(conqueror.getKey().getLife() - 1);
+                            conquerorTown.setLife(conquerorTown.getLife() - 1);
+                            System.out.println("should decrease hp");
                             //if health of attacker reaches 0 stop attack
                             //if conqueror has 0 or less hp, attack will be aborted
                             if (conquerorTown.getLife() <= 0) {
@@ -230,7 +235,8 @@ public class WorldController {
 
                             //town is conquered abort all attacks and change owner
                             if (town.getLife() <= 0 && town.getConqueredByTowns().size() > 0) {
-                                ConnectionController.changeTownOwnerRequest(player, town);
+                                town.removeAllConquerors();
+                                ConnectionController.changeTownOwnerRequest(((Town)wm.getTreeNode(conqueror.getKey())).getOwner(), town);
                                 toRemove.clear();
                                 break;
                             }
@@ -239,7 +245,7 @@ public class WorldController {
                     //remove all attacker, that can not attack anymore
                     if (toRemove.size() > 0) {
                         for (Town remove : toRemove) {
-                            ConnectionController.removeAttackRequest(remove, town);
+                            ConnectionController.removeAttackRequest(((Town)wm.getTreeNode(remove)), town);
                         }
                     }
                 }
