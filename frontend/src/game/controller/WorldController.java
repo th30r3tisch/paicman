@@ -112,8 +112,6 @@ public class WorldController {
                         if ((currentSelect.getOwner() != null && currentSelect.getOwner().getName().equals(player.getName())) && !town.getConqueredByTowns().contains(currentSelect)) {
                             ConnectionController.attackRequest(currentSelect, town);
                             currentSelect = null;
-                        } else {
-                            currentSelect = town;
                         }
                     } else currentSelect = null;
                 });
@@ -230,7 +228,7 @@ public class WorldController {
 
                             //town is conquered abort all attacks and change owner
                             if (town.getLife() <= 0 && town.getConqueredByTowns().size() > 0) {
-                                ConnectionController.changeTownOwnerRequest(player, town);
+                                ConnectionController.changeTownOwnerRequest(conqueror.getKey().getOwner(), town);
                                 toRemove.clear();
                                 break;
                             }
