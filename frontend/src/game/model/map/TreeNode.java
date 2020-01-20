@@ -5,7 +5,7 @@ import javafx.scene.shape.Shape;
 import java.io.Serializable;
 
 public abstract class TreeNode implements Serializable {
-    private static final long serialVersionUID = 4467335650668243334L;
+    private static final long serialVersionUID = 5912386326094196679L;
     float x,y;
 
     public float getX() {
