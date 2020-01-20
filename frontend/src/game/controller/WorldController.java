@@ -180,7 +180,7 @@ public class WorldController {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
-
+                    LOGGER.log(Level.SEVERE, "While loop error", ex);
                 }
                 // UI update is run on the Application thread
                 Platform.runLater(updater);
