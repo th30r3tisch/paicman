@@ -7,7 +7,6 @@ import game.model.map.TreeNode;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;

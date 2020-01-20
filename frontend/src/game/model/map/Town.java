@@ -19,7 +19,6 @@ public class Town extends TreeNode implements Serializable {
     //changed array type to check for accurate attack ticks later
     private ArrayList<AbstractMap.SimpleEntry<Town, Long>> conqueredByTowns = new ArrayList<>();
 
-
     public ArrayList<AbstractMap.SimpleEntry<Town, Long>> getConqueredByTownEntries(){
         return conqueredByTowns;
     }
