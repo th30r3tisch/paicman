@@ -1,6 +1,5 @@
 package game.model.map;
 
-import game.controller.ConnectionController;
 import game.model.Player;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
@@ -56,7 +55,7 @@ public class Town extends TreeNode implements Serializable {
     public void removeConqueredByTown(Town town) {
         System.out.println("in town remove method");
         System.out.println("town in list? " + this.getConqueredByTowns().contains(town));
-        this.conqueredByTowns.removeIf(entry -> (entry.getKey() == town));
+        this.conqueredByTowns.removeIf(entry -> (entry.getKey().isNode(town.x, town.y)));
         this.conqueredByTowns.trimToSize();
     }
 

@@ -144,10 +144,10 @@ public class Quadtree implements Serializable {
                 }
             }
         }
-        addTownAtk(tree.northWest, deff, atk);
-        addTownAtk(tree.northEast, deff, atk);
-        addTownAtk(tree.southWest, deff, atk);
-        addTownAtk(tree.southEast, deff, atk);
+        rmTownAtk(tree.northWest, deff, atk);
+        rmTownAtk(tree.northEast, deff, atk);
+        rmTownAtk(tree.southWest, deff, atk);
+        rmTownAtk(tree.southEast, deff, atk);
     }
 
 
