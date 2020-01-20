@@ -226,7 +226,6 @@ public class WorldController {
                                 town.setLife(town.getLife() + 1);
                             }
                             conquerorTown.setLife(conquerorTown.getLife() - 1);
-                            System.out.println("should decrease hp");
                             //if health of attacker reaches 0 stop attack
                             //if conqueror has 0 or less hp, attack will be aborted
                             if (conquerorTown.getLife() <= 0) {

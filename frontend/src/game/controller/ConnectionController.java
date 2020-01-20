@@ -70,7 +70,6 @@ public class ConnectionController implements Runnable{
                             break;
                         case INIT:
                             LOGGER.log(Level.INFO,"Server msg");
-                            System.out.println("case init");
                             System.out.println("player new " + message.getPlayer().getName());
                             updatePlayer(message.getPlayer());
                             wc.addQuadTree(message.getQuadtree());
