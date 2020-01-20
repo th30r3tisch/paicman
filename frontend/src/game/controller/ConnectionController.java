@@ -137,7 +137,7 @@ public class ConnectionController implements Runnable{
             for (Town t : player.getOwnedTowns()) {
                 boolean isIn = false;
                 for(Town owned: ConnectionController.getPlayer().getOwnedTowns()) {
-                    if (owned.getX() == t.getX() && owned.getX() == t.getY()) {
+                    if (owned.getX() == t.getX() && owned.getY() == t.getY()) {
                         isIn = true;
                         break;
                     }

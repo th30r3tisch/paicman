@@ -148,7 +148,7 @@ public class WorldController {
                             }
                         });
                         line.setStrokeWidth(8);
-                        line.setStroke(player.getFXColor());
+                        line.setStroke(attacker.getOwner().getFXColor());
                         shapes.add(line);
                     }
                 }
@@ -230,7 +230,6 @@ public class WorldController {
 
                             //town is conquered abort all attacks and change owner
                             if (town.getLife() <= 0 && town.getConqueredByTowns().size() > 0) {
-                                //remove all might has to be changed
                                 ConnectionController.changeTownOwnerRequest(player, town);
                                 toRemove.clear();
                                 break;
