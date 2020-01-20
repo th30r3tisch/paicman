@@ -41,7 +41,7 @@ public class Town extends TreeNode implements Serializable {
     }
 
     public Town(int x, int y) {
-        this.life = 20;
+        this.life = 10;
         this.x = x;
         this.y = y;
     }

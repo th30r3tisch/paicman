@@ -24,6 +24,14 @@ public class WorldModel implements Serializable {
         return treeNodes;
     }
 
+    public TreeNode getTreeNode(TreeNode toFindNode){
+        for(int i = 0; i< treeNodes.size(); i++){
+            if(treeNodes.get(i).isNode(toFindNode.getX(), toFindNode.getY()))
+                return treeNodes.get(i);
+        }
+        return null;
+    }
+
     public ArrayList<TreeNode> getAreaContent(int startX, int startY, int endX, int endY) {
         return this.quadtree.getAllContent(quadtree, startX, startY, endX, endY);
     }
