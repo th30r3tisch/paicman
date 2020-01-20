@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 class Game {
     private WorldModel world;
+    private KI ki;
     private static Logger LOGGER = Logger.getLogger("InfoLogging");
     private int obstacles = 10;
     private int towns = 20;
@@ -25,6 +26,7 @@ class Game {
         this.world = new WorldModel(0, 0, gameMapWidth, gameMapHeight);
         LOGGER.log(Level.INFO,"Creating map");
         genereateInitialMap();
+        createKI();
     }
 
     private void genereateInitialMap() {
@@ -36,6 +38,27 @@ class Game {
          for (int i = 0; i < towns; i++){
              createTown();
          }
+     }
+
+     private void createKI(){
+        this.ki = new KI();
+        Town t = this.createTown();
+        t.setOwner(ki.getKi());
+        ki.getKi().setOwnedTown(t);
+        Thread thread = new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException ex) {
+                    LOGGER.log(Level.SEVERE, "KI Error", ex);
+                }
+                for (Town town: ki.getKi().getOwnedTowns()) {
+                    town.getLife();
+                }
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
      }
 
      public Town createTown(){
@@ -65,7 +88,6 @@ class Game {
 
      public boolean isIntersecting(ArrayList<TreeNode> towns){
         ArrayList<TreeNode> intersectionObjs = new ArrayList<>();
-        //rectangle between towns
         int t1x = (int) towns.get(0).getX();
         int t1y = (int) towns.get(0).getY();
         int t2x = (int) towns.get(1).getX();
@@ -74,21 +96,22 @@ class Game {
         int startY = Math.min(t1y, t2y);
         int endX = Math.max(t1x, t2x);
         int endY = Math.max(t1y, t2y);
+        //rectangle between towns
         intersectionObjs.addAll(this.getAreaContent(startX, startY, endX, endY));
         //rectangle around town one
-         intersectionObjs.addAll(this.getAreaContent(t1x - obstacleMaxLength, t1y - obstacleMaxLength, t1x + obstacleMaxLength, t1y + obstacleMaxLength));
-         //rectangle around town two
-         intersectionObjs.addAll(this.getAreaContent(t2x - obstacleMaxLength, t2y - obstacleMaxLength, t2x + obstacleMaxLength, t2y + obstacleMaxLength));
-         if (intersectionObjs.size() != 0) {
-             for (TreeNode node: intersectionObjs ) {
-                if(node instanceof Obstacle){
-                    boolean intersecting;
-                    intersecting = Line2D.linesIntersect(towns.get(0).getX(),towns.get(0).getY(),towns.get(1).getX(),towns.get(1).getY(), node.getX(), node.getY(), node.getX() + ((Obstacle) node).getWidth(), node.getY() + ((Obstacle) node).getHeight());
-                    if (intersecting) return true;
-                }
-             }
-         }
-         return false;
+        intersectionObjs.addAll(this.getAreaContent(t1x - obstacleMaxLength, t1y - obstacleMaxLength, t1x + obstacleMaxLength, t1y + obstacleMaxLength));
+        //rectangle around town two
+        intersectionObjs.addAll(this.getAreaContent(t2x - obstacleMaxLength, t2y - obstacleMaxLength, t2x + obstacleMaxLength, t2y + obstacleMaxLength));
+        if (intersectionObjs.size() != 0) {
+            for (TreeNode node: intersectionObjs ) {
+               if(node instanceof Obstacle){
+                   boolean intersecting;
+                   intersecting = Line2D.linesIntersect(towns.get(0).getX(),towns.get(0).getY(),towns.get(1).getX(),towns.get(1).getY(), node.getX(), node.getY(), node.getX() + ((Obstacle) node).getWidth(), node.getY() + ((Obstacle) node).getHeight());
+                   if (intersecting) return true;
+               }
+            }
+        }
+        return false;
      }
 
      private int randomNumber(int min, int max){
