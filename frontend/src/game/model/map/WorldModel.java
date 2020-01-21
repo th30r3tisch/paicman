@@ -33,7 +33,7 @@ public class WorldModel implements Serializable {
     }
 
     public ArrayList<TreeNode> getAreaContent(int startX, int startY, int endX, int endY) {
-        return this.quadtree.getAllContent(quadtree, startX, startY, endX, endY);
+        return this.quadtree.getConquerContent(startX, startY, endX, endY);
     }
 
     public void addNode(TreeNode shape) {

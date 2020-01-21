@@ -32,6 +32,7 @@ public class WorldController {
     public WorldModel wm;
     public Group group;
     public World world;
+    private KIController kic;
 
     /**
      * Inject the stage from {@link World}
@@ -40,6 +41,7 @@ public class WorldController {
         this.wm = new WorldModel();
         startUpdater();
         this.group = new Group();
+        this.kic = new KIController();
         world = new World(this);
     }
 
@@ -95,6 +97,11 @@ public class WorldController {
                 Town town = (Town) tn;
                 Shape shape = town.create();
                 Player player = ConnectionController.getPlayer();
+
+                if(town.getOwner() != null){
+                    if(town.getOwner().getName().equals("KI"))
+                        kic.checkTown(town, wm);
+                }
 
                 if (currentSelect == town) {
                     shape.setStrokeWidth(3);
@@ -244,7 +251,7 @@ public class WorldController {
                     //remove all attacker, that can not attack anymore
                     if (toRemove.size() > 0) {
                         for (Town remove : toRemove) {
-                            ConnectionController.removeAttackRequest(((Town)wm.getTreeNode(remove)), town);
+                            ConnectionController.removeAttackRequest(wm.getTreeNode(remove), town);
                         }
                     }
                 }

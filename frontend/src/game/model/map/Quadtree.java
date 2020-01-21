@@ -85,20 +85,20 @@ public class Quadtree implements Serializable {
             LOGGER.log(Level.SEVERE, "ERROR : Unhandled partition " + x + " " + y);
     }
 
-    public void getAreaContent(Quadtree tree, int startX, int startY, int endX, int endY, ArrayList<TreeNode> wholeMap) {
+    public void getAreaContent(Quadtree tree, int startX, int startY, int endX, int endY, ArrayList<TreeNode> areaMap) {
         if (tree == null) return;
 
         if (!(startX > tree.boundry.xMax) && !(endX < tree.boundry.xMin) && !(startY > tree.boundry.yMax) && !(endY < tree.boundry.yMin)) {
             for (TreeNode treeNode : tree.treeNodes) {
                 if (treeNode.inRange(startX, startY, endX, endY)) {
-                    wholeMap.add(treeNode);
+                    areaMap.add(treeNode);
                 }
             }
         }
-        getAreaContent(tree.northWest, startX, startY, endX, endY, wholeMap);
-        getAreaContent(tree.northEast, startX, startY, endX, endY, wholeMap);
-        getAreaContent(tree.southWest, startX, startY, endX, endY, wholeMap);
-        getAreaContent(tree.southEast, startX, startY, endX, endY, wholeMap);
+        getAreaContent(tree.northWest, startX, startY, endX, endY, areaMap);
+        getAreaContent(tree.northEast, startX, startY, endX, endY, areaMap);
+        getAreaContent(tree.southWest, startX, startY, endX, endY, areaMap);
+        getAreaContent(tree.southEast, startX, startY, endX, endY, areaMap);
     }
 
     public ArrayList<TreeNode> getAllContent(Quadtree tree, int startX, int startY, int endX, int endY) {
@@ -168,7 +168,6 @@ public class Quadtree implements Serializable {
                 }
             }
         }
-
         changeTownOwnership(tree.northWest, player, town);
         changeTownOwnership(tree.northEast, player, town);
         changeTownOwnership(tree.southWest, player, town);
@@ -190,5 +189,11 @@ public class Quadtree implements Serializable {
 
     public void updateTownOwnership(Player player, TreeNode treeNode) {
         changeTownOwnership(this, player, ((Town) treeNode));
+    }
+
+    public ArrayList<TreeNode> getConquerContent(int startX, int startY, int endX, int endY){
+        ArrayList<TreeNode> conquerItems = new ArrayList<>();
+        getAreaContent(this, startX, startY, endX, endY, conquerItems);
+        return conquerItems;
     }
 }

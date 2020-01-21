@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 import static game.model.MessageType.*;
 
-// is responsible for handling all the connections
+//is responsible for handling all the connections
 public class ConnectionController implements Runnable{
     private String serverAddress;
     private Socket socket;
