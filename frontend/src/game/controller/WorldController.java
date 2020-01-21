@@ -103,12 +103,13 @@ public class WorldController {
                         kic.checkTown(town, wm);
                 }
 
-                if (currentSelect == town) {
+                if (currentSelect == null) {
+                    world.updateTownDisplay(null);
+                }
+                else if (currentSelect.isNode(town.getX(), town.getY())) {
                     shape.setStrokeWidth(3);
                     shape.setStroke(Color.RED);
                     world.updateTownDisplay(currentSelect);
-                } else if (currentSelect == null) {
-                    world.updateTownDisplay(null);
                 }
                 world.updatePlayerStat(player);
                 shape.setOnMousePressed(mouseEvent -> {
@@ -119,7 +120,8 @@ public class WorldController {
                         if ((currentSelect.getOwner() != null && currentSelect.getOwner().getName().equals(player.getName())) && !town.getConqueredByTowns().contains(currentSelect)) {
                             ConnectionController.attackRequest(currentSelect, town);
                             currentSelect = null;
-                        }
+                        } else
+                            currentSelect = town;
                     } else currentSelect = null;
                 });
 
