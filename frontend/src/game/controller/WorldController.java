@@ -210,8 +210,6 @@ public class WorldController {
 
         //find all towns
         Player player = ConnectionController.getPlayer();
-        //System.out.println("player name:" + player.getName());
-        //.out.println("player color:" + player.getFXColor());
         for (TreeNode treeNode : wm.getTreeNodes()) {
             if (treeNode instanceof Town) {
                 Town town = (Town) treeNode;

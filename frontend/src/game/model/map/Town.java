@@ -72,7 +72,6 @@ public class Town extends TreeNode implements Serializable {
     public Player getOwner() { return owner; }
 
     public void setOwner(Player conqueror) {
-        System.out.println("conqueror name:" + conqueror.getName());
         this.owner = conqueror;
         this.color = conqueror.getColor();
     }

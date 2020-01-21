@@ -16,7 +16,7 @@ public class Player implements Serializable {
     public void setOwnedTown(Town town) { this.ownedTowns.add(town); }
     public void removeOwnedTown(Town town){
         for(Town t : ownedTowns){
-            if(t.getX() == town.getX() && t.getY() == town.getY()){
+            if(t.isNode(town.getX(), town.getY())){
                 ownedTowns.remove(t);
                 break;
             }

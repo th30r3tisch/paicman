@@ -157,7 +157,7 @@ public class Quadtree implements Serializable {
         if (!(town.x > tree.boundry.xMax) && !(town.x < tree.boundry.xMin) && !(town.y > tree.boundry.yMax) && !(town.y < tree.boundry.yMin)) {
             for (int i = 0; i < tree.treeNodes.size(); i++) {
                 if (tree.treeNodes.get(i).isNode(town.x, town.y)) {
-                    if (town.getOwner() != null && !town.getOwner().getName().equals(ConnectionController.getPlayer().getName())) {
+                    if (town.getOwner() != null && town.getOwner().getName().equals(ConnectionController.getPlayer().getName())) {
                         ConnectionController.getPlayer().removeOwnedTown(town);
                     }
                     else if (player.getName().equals(ConnectionController.getPlayer().getName())) {
