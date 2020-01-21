@@ -60,9 +60,6 @@ public class ConnectionController implements Runnable{
                     switch (message.getType()) {
                         case PLAYER:
                             LOGGER.log(Level.INFO,"Player msg");
-                            System.out.println("case player");
-                            System.out.println("player old " + player.getName());
-                            System.out.println("player new" + message.getPlayer().getName());
                             player = message.getPlayer();
                             break;
                         case NOTIFICATION:
@@ -70,7 +67,6 @@ public class ConnectionController implements Runnable{
                             break;
                         case INIT:
                             LOGGER.log(Level.INFO,"Server msg");
-                            System.out.println("player new " + message.getPlayer().getName());
                             updatePlayer(message.getPlayer());
                             wc.addQuadTree(message.getQuadtree());
                             break;
@@ -86,7 +82,6 @@ public class ConnectionController implements Runnable{
                             LOGGER.log(Level.INFO,message.getPlayer().getName() + " attacks a village");
                             break;
                         case REMOVE_ATTACK:
-                            System.out.println("lenght: " + message.getTreeNodes().size());
                             rmupdateQuadtree(message.getTreeNodes());
                             LOGGER.log(Level.INFO,message.getPlayer().getName() + " stopped attacking a village");
                             break;
@@ -130,7 +125,6 @@ public class ConnectionController implements Runnable{
     private void updatePlayer(Player player){
         if(ConnectionController.player.getName().equals(player.getName())) {
             if (ConnectionController.player.getColor() == null) {
-                System.out.println("updating color of " + ConnectionController.player.getName());
                 ConnectionController.player.setColor(player.getColor());
             }
             for (Town t : player.getOwnedTowns()) {
@@ -190,7 +184,6 @@ public class ConnectionController implements Runnable{
         Message mapRequest = new Message();
         mapRequest.setPlayer(player);
         mapRequest.setType(CHANGE_OWNER);
-        System.out.println("to send town: "+ player.getName());
         ArrayList<TreeNode> townList = new ArrayList<>();
         townList.add(town);
         mapRequest.setTreeNodes(townList);

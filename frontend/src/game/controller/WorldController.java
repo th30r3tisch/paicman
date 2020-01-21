@@ -147,7 +147,6 @@ public class WorldController {
                                     }
                                     //check if you are eligible to abort attack
                                     if (finalAttacker.getOwner().getName().equals(player.getName())){
-                                        System.out.println("attacker owner "+ finalAttacker.getOwner());
                                         ConnectionController.removeAttackRequest(attacker1, attacked);
                                     }
 
@@ -188,7 +187,7 @@ public class WorldController {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
-
+                    LOGGER.log(Level.SEVERE, "While loop error", ex);
                 }
                 // UI update is run on the Application thread
                 Platform.runLater(updater);
